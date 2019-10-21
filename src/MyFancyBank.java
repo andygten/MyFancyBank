@@ -14,10 +14,10 @@ public class MyFancyBank extends Bank {
     // Static Variables
     static public Record sessionRecord;
     static public Screen screen;
-    static public Account account;
-    static public String inputFirstName;
-    static public String inputMiddleName;
-    static public String inputLastName;
+    static public Account[] accounts;               ///< List of Accounts associated with users
+    static public String inputFirstName;            ///< First Name of User
+    static public String inputMiddleName;           ///< Middle Name of User
+    static public String inputLastName;             ///< Last Name of User
     static public String inputId;
     static public String inputBalance;
     static public String inputPIN;
@@ -78,12 +78,12 @@ public class MyFancyBank extends Bank {
         }
         if (ret == 0)
         {
-            DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
-            screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
-            screen.nextScreen();
-            screen.currentPanel.clearText();
-            screen.currentPanel.displayText("Great! Enter your Login Information!\nAccount ID: ");
-            JTextField textAccountID = new JTextField("Account ID");
+            //DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
+            //screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
+            //screen.nextScreen();
+            //screen.currentPanel.clearText();
+            //screen.currentPanel.displayText("Great! Enter your Login Information!");
+            promptLoginInfo();
         }
         else
         {
@@ -91,57 +91,7 @@ public class MyFancyBank extends Bank {
             screen.currentPanel.displayText("OK! Enter the prompted information to create an account!");
         }
 
-        ret = -1;
 
-        screen.currentPanel.clearText();
-
-        while (ret == -1)
-        {
-            if (screen.currentPanel.keyboard.newInput) {
-                Thread.sleep(50);
-                for (int iii = 0; iii < screen.currentPanel.keyboard.getKeyBoardInput().size(); iii++)
-                {
-                    screen.currentPanel.appendText(screen.currentPanel.keyboard.getKeyBoardInput().get(iii));
-                }
-            }
-            screen.currentPanel.keyboard.setNewInput(false);
-
-            ret = EnterPressed(inputName);
-        }
-
-        ret = -1;
-
-        while (ret == -1)
-        {
-            if (screen.currentPanel.keyboard.newInput) {
-                Thread.sleep(50);
-                for (int iii = 0; iii < screen.currentPanel.keyboard.getKeyBoardInput().size(); iii++)
-                {
-                    screen.currentPanel.appendText(screen.currentPanel.keyboard.getKeyBoardInput().get(iii));
-                }
-            }
-            screen.currentPanel.keyboard.setNewInput(false);
-
-            ret = EnterPressed(accountId);
-        }
-
-        ret = -1;
-
-        screen.currentPanel.appendText("\n Password:");
-
-        while (ret == -1)
-        {
-            if (screen.currentPanel.keyboard.newInput) {
-                Thread.sleep(50);
-                for (int iii = 0; iii < screen.currentPanel.keyboard.getKeyBoardInput().size(); iii++)
-                {
-                    screen.currentPanel.appendText(screen.currentPanel.keyboard.getKeyBoardInput().get(iii));
-                }
-            }
-            screen.currentPanel.keyboard.setNewInput(false);
-
-            ret = EnterPressed(password);
-        }
 
         System.out.println("Exiting Program");
     }
@@ -198,5 +148,67 @@ public class MyFancyBank extends Bank {
         }
 
         return -1;
+    }
+
+    private static void promptLoginInfo()
+    {
+        DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.KEYBOARD};
+        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
+        screen.nextScreen();
+        screen.currentPanel.clearText();
+        screen.currentPanel.displayText("Great! Enter your Login Information!");
+
+        int ret = -1;
+        screen.currentPanel.appendText("\nAccount ID: ");
+
+        while (ret == -1)
+        {
+            if (screen.currentPanel.keyboard.newInput) {
+                System.out.println("INPUT Detected");
+                for (int iii = 0; iii < screen.currentPanel.keyboard.getKeyBoardInput().size(); iii++)
+                {
+                    try
+                    {
+                        Thread.sleep(100);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        System.err.println(e);
+                    }
+                    screen.currentPanel.appendText(screen.currentPanel.keyboard.getKeyBoardInput().get(iii));
+                }
+            }
+            screen.currentPanel.keyboard.setNewInput(false);
+
+            ret = EnterPressed(inputId);
+        }
+
+        ret = -1;
+
+        DisplayPanel.Components[] components = {DisplayPanel.Components.PINPAD};
+        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(components);
+        screen.nextScreen();
+        screen.currentPanel.appendText("\nPassword: ");
+
+        while (ret == -1)
+        {
+            if (screen.currentPanel.keyboard.newInput) {
+                for (int iii = 0; iii < screen.currentPanel.keyboard.getKeyBoardInput().size(); iii++)
+                {
+                    try
+                    {
+                        Thread.sleep(100);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        System.err.println(e);
+                    }
+                    screen.currentPanel.appendText(screen.currentPanel.keyboard.getKeyBoardInput().get(iii));
+                }
+            }
+            screen.currentPanel.keyboard.setNewInput(false);
+
+            ret = EnterPressed(inputPIN);
+        }
     }
 }
