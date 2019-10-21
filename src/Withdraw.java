@@ -44,7 +44,7 @@ public class Withdraw extends Transaction {
      */
     public void perform(Money amount)
     {
-        Money convertedMoney = MoneyConverter.getInstance().convertToCurrency(amount, getTransactionAccount().getCurrencyPreference());
+        Money convertedMoney = Teller.getInstance().convertToCurrency(amount, getTransactionAccount().getCurrencyPreference());
         if (getTransactionAccount().getBalance().getAmount() >= convertedMoney.getAmount())
         {
             withdraw(amount);

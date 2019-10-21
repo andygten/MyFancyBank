@@ -24,17 +24,17 @@ public class Money {
     public CurrencyTypes getCurrencyType() { return currencyType; }
 
     public void add(Money otherMoney) {
-        Money convertedMoney = MoneyConverter.getInstance().convertToCurrency(otherMoney, currencyType);
+        Money convertedMoney = Teller.getInstance().convertToCurrency(otherMoney, currencyType);
         amount += convertedMoney.getAmount();
     }
 
     public void subtract(Money otherMoney) {
-        Money convertedMoney = MoneyConverter.getInstance().convertToCurrency(otherMoney, currencyType);
+        Money convertedMoney = Teller.getInstance().convertToCurrency(otherMoney, currencyType);
         amount -= convertedMoney.getAmount();
     }
 
     public void multiply(Money otherMoney) {
-        Money convertedMOney = MoneyConverter.getInstance().convertToCurrency(otherMoney, currencyType);
+        Money convertedMOney = Teller.getInstance().convertToCurrency(otherMoney, currencyType);
         amount *= convertedMOney.getAmount();
     }
 }

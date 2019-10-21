@@ -37,12 +37,12 @@ public class Tax {
     public Money applyTax(Money money)
     {
         // Convert to common currency and apply the tax
-        Money convertedMoney = MoneyConverter.getInstance().convertToCurrency(money, currencyType);
+        Money convertedMoney = Teller.getInstance().convertToCurrency(money, currencyType);
         Money taxedAmount= new Money(convertedMoney.getAmount() * taxedPercentage, currencyType);
         totalTaxedAmount.add(taxedAmount);
 
         // Return the money with the applied tax, in the original currency
         Money convertedMoneyWithTaxApplied = new Money(convertedMoney.getAmount() * (1 - taxedPercentage), currencyType);
-        return MoneyConverter.getInstance().convertToCurrency(convertedMoneyWithTaxApplied, money.getCurrencyType());
+        return Teller.getInstance().convertToCurrency(convertedMoneyWithTaxApplied, money.getCurrencyType());
     }
 }

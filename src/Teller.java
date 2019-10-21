@@ -3,20 +3,20 @@
  * @brief The Teller is reponsible for converting and processing money transactions within the bank
  */
 
-public final class MoneyConverter {
+public final class Teller {
 
     private static final CurrencyTypes DEFAULT_CURRENCY_TYPE = CurrencyTypes.Usd;
 
-    private static MoneyConverter moneyConverter = null;
+    private static Teller teller = null;
 
-    public static MoneyConverter getInstance() {
-        if (moneyConverter == null) {
-            moneyConverter = new MoneyConverter();
+    public static Teller getInstance() {
+        if (teller == null) {
+            teller = new Teller();
         }
-        return moneyConverter;
+        return teller;
     }
 
-    public MoneyConverter() {}
+    public Teller() {}
 
     public Money convertToCurrency(Money money, CurrencyTypes currencyType) {
         // If we're already converted, return

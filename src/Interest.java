@@ -30,7 +30,7 @@ public class Interest {
 
     private boolean doesAccountRequireInterest(Account account)
     {
-        Money convertedMoney = MoneyConverter.getInstance().convertToCurrency(account.getBalance(), MIN_BALANCE_TO_COLLECT_INTEREST.getCurrencyType());
+        Money convertedMoney = Teller.getInstance().convertToCurrency(account.getBalance(), MIN_BALANCE_TO_COLLECT_INTEREST.getCurrencyType());
         return account.getBalance().getAmount() >= MIN_BALANCE_TO_COLLECT_INTEREST.getAmount();
     }
 
