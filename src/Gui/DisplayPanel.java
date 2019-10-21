@@ -23,8 +23,11 @@ public class DisplayPanel extends JPanel {
         CUSTOMER,
         PINPAD,
         KEYBOARD,
+        BACK,
         TEXTINPUT,
-        OKBUTTON
+        OKBUTTON,
+        ACCOUNT_LOGIN_PANEL,
+        ACCOUNT_CREATE_PANEL
     }
 
     // Static
@@ -34,35 +37,44 @@ public class DisplayPanel extends JPanel {
     static private JTextPane textPane;                      ///< Main Text Window
     static private JLabel textLabel;                        ///< Main Text Display
     public static int numActiveButtons = 0;
-    public static int MAX_NUM_BUTTONS = 2056;
+    public static int MAX_NUM_BUTTONS = 48;
 
     // Members
     public ArrayList<JComponent> components;
+    public BackButton backButton;
     public YesButton yesButton;                     ///< Yes Button
     public NoButton noButton;                       ///< No Button
     public ManagerButton managerButton;             ///< Account Selection Button for Managers
     public CustomerButton customerButton;           ///< Account Selection Button for Managers
     public PinPad pinPad;                           ///< Pinpad Object
-    public Keyboard keyboard;                       ///< Keyboard Object
+    //public Keyboard keyboard;                     ///< Keyboard Object
+    JTextField AccountTextField;                    ///< Account TextField
     public StyledDocument doc;
+    public AccountLoginPanel accountLoginPanel;
+    public AccountCreatePanel accountCreatePanel;
 
     /**
      * @brief No Arg Constructor
      */
     public DisplayPanel(Dimension dimension, Rectangle rectangle) {
 
-        components = new ArrayList<JComponent>(256);
+        components = new ArrayList<JComponent>(48);
 
-        // Side Buttons
+        // Input Buttons
         managerButton = new ManagerButton();
         managerButton.addEventHandler();
         components.add(managerButton);
         customerButton = new CustomerButton();
         customerButton.addEventHandler();
         components.add(customerButton);
-        keyboard = new Keyboard();
-        keyboard.addKeyBoardListener();
-        components.add(keyboard.Container);
+        backButton = new BackButton();
+        backButton.addEventHandler();
+        accountLoginPanel = new AccountLoginPanel();
+        accountCreatePanel = new AccountCreatePanel();
+
+        //keyboard = new Keyboard();
+        //keyboard.addKeyBoardListener();
+        //components.add(keyboard.Container);
 
         // Inactive at first
         pinPad = new PinPad();
@@ -183,8 +195,23 @@ public class DisplayPanel extends JPanel {
                     break;
 
                 case KEYBOARD:
-                    add(keyboard.Container);
-                    components.add(keyboard.Container);
+                    //add(keyboard.Container);
+                    //components.add(keyboard.Container);
+                    break;
+
+                case ACCOUNT_LOGIN_PANEL:
+                    add(accountLoginPanel);
+                    components.add(accountLoginPanel);
+                    break;
+
+                case ACCOUNT_CREATE_PANEL:
+                    add(accountCreatePanel);
+                    components.add(accountCreatePanel);
+                    break;
+
+                case BACK:
+                    add(backButton);
+                    components.add(backButton);
                     break;
             }
         }

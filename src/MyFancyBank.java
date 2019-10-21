@@ -31,6 +31,7 @@ public class MyFancyBank extends Bank {
         sessionRecord = new Record();
         screen = new Screen();
 
+        inputId = new String();
         screen = new Screen();
         screen.setTitle("My Fancy Bank");
         screen.setSize(1000, 600);
@@ -39,37 +40,9 @@ public class MyFancyBank extends Bank {
         screen.setVisible(true);
         screen.currentPanel.displayText("Hello and Welcome to My Fancy Bank! Are you a Manager or a Customer?");
 
+        decideUser();
+
         int ret = -1;
-        while (ret == -1)
-        {
-            Thread.sleep(100);
-            ret = hasDecisionBeenMade();
-        }
-
-        switch (ret)
-        {
-            // Manager was chosen
-            case 0:
-                System.out.println("Manager was chosen");
-                DisplayPanel.Components[] components = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
-                screen.displayPanels[Screen.getFrame()+1].CreateDisplay(components);
-                screen.nextScreen();
-                screen.currentPanel.clearText();
-                screen.currentPanel.displayText("Hello Manager! Do you already have an account?");
-                break;
-
-            // Customer was chosen
-            case 1:
-                System.out.println("Customer was chosen");
-                DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
-                screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
-                screen.nextScreen();
-                screen.currentPanel.clearText();
-                screen.currentPanel.displayText("Hello Customer! Do you already have an account?");
-                break;
-        }
-
-        ret = -1;
 
         while (ret == -1)
         {
@@ -78,19 +51,12 @@ public class MyFancyBank extends Bank {
         }
         if (ret == 0)
         {
-            //DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
-            //screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
-            //screen.nextScreen();
-            //screen.currentPanel.clearText();
-            //screen.currentPanel.displayText("Great! Enter your Login Information!");
             promptLoginInfo();
         }
         else
         {
-            screen.currentPanel.clearText();
-            screen.currentPanel.displayText("OK! Enter the prompted information to create an account!");
+            promptCreateInfo();
         }
-
 
 
         System.out.println("Exiting Program");
@@ -132,83 +98,74 @@ public class MyFancyBank extends Bank {
        return -1;
     }
 
-    private static int EnterPressed(String capture)
+    private static void isBackPressed(String capture)
     {
-        for (String input : screen.currentPanel.keyboard.getKeyBoardInput())
+        if (screen.currentPanel.backButton.isButtonSelected())
         {
-           if (input != null) {
-                if (input.compareTo("enter") == 0) {
-                    return 0;
-                }
-                else
-                {
-                   capture.concat(input);
-                }
-            }
+            screen.previousScreen();
         }
-
-        return -1;
     }
 
     private static void promptLoginInfo()
     {
-        DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.KEYBOARD};
+        screen.currentPanel.clearText();
+        screen.currentPanel.displayText("OK! Enter your Login Information!");
+        DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.ACCOUNT_LOGIN_PANEL};
         screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
         screen.nextScreen();
+    }
+
+    private static void promptCreateInfo()
+    {
         screen.currentPanel.clearText();
-        screen.currentPanel.displayText("Great! Enter your Login Information!");
-
-        int ret = -1;
-        screen.currentPanel.appendText("\nAccount ID: ");
-
-        while (ret == -1)
-        {
-            if (screen.currentPanel.keyboard.newInput) {
-                System.out.println("INPUT Detected");
-                for (int iii = 0; iii < screen.currentPanel.keyboard.getKeyBoardInput().size(); iii++)
-                {
-                    try
-                    {
-                        Thread.sleep(100);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        System.err.println(e);
-                    }
-                    screen.currentPanel.appendText(screen.currentPanel.keyboard.getKeyBoardInput().get(iii));
-                }
-            }
-            screen.currentPanel.keyboard.setNewInput(false);
-
-            ret = EnterPressed(inputId);
-        }
-
-        ret = -1;
-
-        DisplayPanel.Components[] components = {DisplayPanel.Components.PINPAD};
-        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(components);
+        screen.currentPanel.displayText("OK! Enter the prompted information to create an account!");
+        DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.ACCOUNT_CREATE_PANEL};
+        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
         screen.nextScreen();
-        screen.currentPanel.appendText("\nPassword: ");
+    }
 
+    private static void decideUser()
+    {
+        int ret = -1;
         while (ret == -1)
         {
-            if (screen.currentPanel.keyboard.newInput) {
-                for (int iii = 0; iii < screen.currentPanel.keyboard.getKeyBoardInput().size(); iii++)
-                {
-                    try
-                    {
-                        Thread.sleep(100);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        System.err.println(e);
-                    }
-                    screen.currentPanel.appendText(screen.currentPanel.keyboard.getKeyBoardInput().get(iii));
-                }
+            try
+            {
+                Thread.sleep(100);
             }
-            screen.currentPanel.keyboard.setNewInput(false);
-
-            ret = EnterPressed(inputPIN);
+            catch (InterruptedException e)
+            {
+                System.err.println(e);
+            }
+            ret = hasDecisionBeenMade();
         }
+
+        switch (ret)
+        {
+            // Manager was chosen
+            case 0:
+                System.out.println("Manager was chosen");
+                DisplayPanel.Components[] components = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
+                screen.displayPanels[Screen.getFrame()+1].CreateDisplay(components);
+                screen.nextScreen();
+                screen.currentPanel.clearText();
+                screen.currentPanel.displayText("Hello Manager! Do you already have an account?");
+                break;
+
+            // Customer was chosen
+            case 1:
+                System.out.println("Customer was chosen");
+                DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
+                screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
+                screen.nextScreen();
+                screen.currentPanel.clearText();
+                screen.currentPanel.displayText("Hello Customer! Do you already have an account?");
+                break;
+        }
+    }
+
+    private static void determineAccountOwner()
+    {
+
     }
 }

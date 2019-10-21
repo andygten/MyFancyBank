@@ -1,10 +1,9 @@
 package Gui;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class YesButton extends SideButton{
+public class YesButton extends InputButton {
 
     public YesButton()
     {

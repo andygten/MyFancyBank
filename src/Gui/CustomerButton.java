@@ -6,11 +6,10 @@
  */
 package Gui;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CustomerButton extends SideButton {
+public class CustomerButton extends InputButton {
 
     public CustomerButton()
     {

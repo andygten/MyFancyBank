@@ -20,7 +20,7 @@ public class Keyboard extends JPanel {
     private static final int NUM_KEYBOARD_COLS = 14;
     private static final int MAX_KEYBOARD_BUTTONS = (NUM_KEYBOARD_COLS * NUM_KEYBOARD_ROWS);
     private static final int MAX_INPUT_LENGTH = 64;
-    private static final int MAX_KEYBOARD_INPUT = 2048;
+    private static final int MAX_KEYBOARD_INPUT = 28;
     private static final String[] keyboadList =
             {"`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "backspace",
              "tab", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]", "|",

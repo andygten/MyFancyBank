@@ -3,26 +3,25 @@ package Gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class NoButton extends InputButton {
+public class BackButton extends InputButton {
 
-    public NoButton()
+    public BackButton()
     {
-        setText("No");
-        isActive = true;
+        setText("Back");
     }
 
     public void addEventHandler()
     {
-        addActionListener(new noListener());
+        addActionListener(new backListener());
     }
 
-    class noListener implements ActionListener
+
+    class backListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println("No button clicked");
+            System.out.println( "Back button clicked" );
             selected = true;
         }
     }
-
 }

@@ -10,13 +10,13 @@ package Gui;
 
 import javax.swing.*;
 
-public abstract class SideButton extends JButton {
+public abstract class InputButton extends JButton {
 
     // Members
     protected boolean selected;
     protected boolean isActive;
 
-    public SideButton()
+    public InputButton()
     {
         selected = false;
         isActive = false;

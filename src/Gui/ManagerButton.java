@@ -7,11 +7,10 @@
 
 package Gui;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ManagerButton extends SideButton {
+public class ManagerButton extends InputButton {
 
     public ManagerButton()
     {

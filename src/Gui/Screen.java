@@ -39,7 +39,8 @@ public class Screen extends JFrame {
         add(currentPanel, BorderLayout.CENTER);
         add(currentPanel.customerButton, BorderLayout.EAST);
         add(currentPanel.managerButton, BorderLayout.WEST);
-        add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
+        add(currentPanel.backButton, BorderLayout.SOUTH);
+        //add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
     }
 
     public void nextScreen()
@@ -77,11 +78,15 @@ public class Screen extends JFrame {
             }
             else if (component.getClass() == Keyboard.class)
             {
-                add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
+                //add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
+            }
+            else if (component.getClass() == BackButton.class)
+            {
+                add(currentPanel.backButton, BorderLayout.SOUTH);
             }
             else
             {
-                add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
+                //add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
             }
         }
         revalidate();
