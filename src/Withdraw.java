@@ -15,7 +15,7 @@ public class Withdraw extends Transaction {
 
     public Withdraw()
     {
-        this(new Money(WITHDRAW_INIT, new Account().getCurrencyPreference()), new Account());
+        this(new Money(WITHDRAW_INIT, new CheckingAccount().getCurrencyPreference()), new CheckingAccount());
     }
 
     /**

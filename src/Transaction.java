@@ -22,7 +22,7 @@ public abstract class Transaction {
      */
     public Transaction()
     {
-        this(new Account());
+        this(null);
     }
 
     /**

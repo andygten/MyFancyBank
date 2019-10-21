@@ -14,7 +14,7 @@ public class Customer extends Person {
      */
     public Customer()
     {
-        this(new Account());
+        this(new CheckingAccount());
     }
 
     /**

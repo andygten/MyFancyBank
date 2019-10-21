@@ -5,29 +5,34 @@
  * @date 10/17/19
  */
 
-public class Account {
+public abstract class Account {
+
+    enum AccountType {
+        CHECKING,
+        SAVINGS
+    }
 
     // Members
     private String password;
     private String accountID;
     private Name name;
     private Money balance;
-    private Interest interest;
+    private AccountType accountType;
 
 
-    public Account(String accountID, String password, Name name, String balance) {
+    public Account(String accountID, String password, Name name, String balance, AccountType accountType) {
         this.accountID = accountID;
         this.name = name;
         this.password = password;
         this.balance = new Money(Double.parseDouble(balance), CurrencyTypes.Usd);
-        interest = new Interest();
+        this.accountType = accountType;
     }
 
     /**
      * @brief No Arg Constructor
      */
     public Account() {
-        this("", "", new Name("", "", ""), "0.00");
+        this("", "", new Name("", "", ""), "0.00", AccountType.CHECKING);
     }
 
     /**
@@ -35,7 +40,7 @@ public class Account {
      */
     public Account(String accountID, String password)
     {
-        this(accountID, password, new Name("", "", ""), "0.00");
+        this(accountID, password, new Name("", "", ""), "0.00", AccountType.CHECKING);
     }
 
     /**

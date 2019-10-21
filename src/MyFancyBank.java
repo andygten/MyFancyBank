@@ -56,9 +56,13 @@ public class MyFancyBank extends Bank {
             while (createClicked == false)
             {
                 createClicked = createButtonClicked();
+
             }
             ArrayList<String> strings = screen.currentPanel.accountCreatePanel.getTextData();
-            Account account = new Account(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
+            if (strings.get(6).compareTo("Checking") == 0)
+            {
+                CheckingAccount account = new CheckingAccount(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
+            }
             sessionRecord.addAccount(account);
         }
 
@@ -74,7 +78,7 @@ public class MyFancyBank extends Bank {
             }
             String[] loginData = screen.currentPanel.accountLoginPanel.getTextData();
             System.out.println("Attempting to Validate with [ " + loginData[0] + " : " + loginData[1] + " ]");
-            account = new Account(loginData[0], loginData[1]);
+            account = new CheckingAccount(loginData[0], loginData[1]);
             valid = validateLogin(account);
             screen.currentPanel.accountLoginPanel.loginButton.reset();
         }
