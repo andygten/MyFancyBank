@@ -21,13 +21,12 @@ public class AccountLoginPanel extends JPanel {
     private static final int GRID_COLS = 3;
     private static final int GRID_ROWS = 3;
 
-    public AccountLoginPanel()
-    {
-        this(new Dimension(1,1), new Rectangle(0, 0));
+    public AccountLoginPanel() {
+        this(new Dimension(1, 1), new Rectangle(0, 0));
     }
 
     public AccountLoginPanel(Dimension dim, Rectangle rect) {
-        this.setLayout(new GridLayout(GRID_ROWS,GRID_COLS));
+        this.setLayout(new GridLayout(GRID_ROWS, GRID_COLS));
         this.setBorder(new EmptyBorder(GAP, GAP, GAP, GAP));
 
         GridBagConstraints cs = new GridBagConstraints();
@@ -59,6 +58,15 @@ public class AccountLoginPanel extends JPanel {
         add(passwordTf, cs);
 
         loginButton = new LoginButton();
+        loginButton.addEventHandler();
         add(loginButton);
+    }
+
+    public String[] getTextData() {
+        String[] strings = new String[GRID_ROWS];
+        strings[0] = accountIdTf.getText();
+        strings[1] = passwordTf.getText();
+
+        return strings;
     }
 }

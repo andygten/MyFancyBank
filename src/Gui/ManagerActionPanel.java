@@ -5,7 +5,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class AccountCreatePanel extends JPanel {
+public class ManagerActionPanel extends JPanel {
+
     private JLabel accountIdLbl;
     private JLabel passwordLbl;
     private JLabel firstNameLbl;
@@ -30,13 +31,13 @@ public class AccountCreatePanel extends JPanel {
     private static final int GRID_COLS = 3;
     private static final int GRID_ROWS = 8;
 
-    public AccountCreatePanel()
+    public ManagerActionPanel()
     {
         this(new Dimension(1,1), new Rectangle(0, 0));
     }
 
-    public AccountCreatePanel(Dimension dim, Rectangle rect) {
-        this.setLayout(new GridLayout(GRID_ROWS,GRID_COLS));
+    public ManagerActionPanel(Dimension dim, Rectangle rect) {
+        this.setLayout(new GridLayout(GRID_ROWS, GRID_COLS));
         this.setBorder(new EmptyBorder(GAP, GAP, GAP, GAP));
 
         textData = new ArrayList<String>(GRID_ROWS);
@@ -134,64 +135,4 @@ public class AccountCreatePanel extends JPanel {
         add(createBtn);
     }
 
-    public ArrayList<String> getTextData()
-    {
-        if (accountIdTf.getText() != null) {
-            textData.add(accountIdTf.getText());
-        }
-        else
-        {
-            textData.add("");
-        }
-        if (passwordTf.getText() != null)
-        {
-            textData.add(passwordTf.getText());
-        }
-        else
-        {
-            textData.add("");
-        }
-        if (firstNameTf.getText() != null)
-        {
-            textData.add(firstNameTf.getText());
-        }
-        else
-        {
-            textData.add("");
-        }
-        if (middleNameTf.getText() != null)
-        {
-            textData.add(middleNameTf.getText());
-        }
-        else
-        {
-            textData.add("");
-        }
-        if (lastNameTf.getText() != null)
-        {
-            textData.add(lastNameTf.getText());
-        }
-        else
-        {
-            textData.add("");
-        }
-        if (initialDepositTf.getText() != null)
-        {
-            textData.add(initialDepositTf.getText());
-        }
-        else
-        {
-            textData.add("0.00");
-        }
-        if (accountTypeTf != null)
-        {
-            textData.add(accountTypeTf.getText());
-        }
-        else
-        {
-            textData.add("");
-        }
-
-        return textData;
-    }
 }

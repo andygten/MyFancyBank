@@ -10,7 +10,7 @@ public abstract class Transaction {
 
     // Members
     private Account account;    ///< Account involved in the transaction
-    private Tax tax;
+    protected Tax tax;
 
     public Transaction(Account account) {
         this.account = account;
@@ -34,5 +34,5 @@ public abstract class Transaction {
         return account;
     }
 
-    abstract public void perform(double amount);
+    abstract public void perform(Money amount);
 }

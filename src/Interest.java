@@ -8,32 +8,34 @@
 public class Interest {
 
     // Static Variables
-    static double MIN_BALANCE_TO_COLLECT_INTEREST = 100000;
-    static double DEFAULT_INTEREST_RATE = (1/1000);
+    private static double DEFAULT_INTEREST_RATE = (1/1000);
+    private static CurrencyTypes DEFAULT_CURRENCY_TYPE = CurrencyTypes.Usd;
+    private static final Money MIN_BALANCE_TO_COLLECT_INTEREST = new Money(100000, DEFAULT_CURRENCY_TYPE);
+    private static final double INIT_ACCRUEL = 0.00;
 
     // Members
-    private double interestAccrued;
+    private Money interestAccrued;
     private double interestRate;
 
     public Interest()
     {
-        interestAccrued = 0.00;
+        interestAccrued = new Money(INIT_ACCRUEL, DEFAULT_CURRENCY_TYPE);
         interestRate = DEFAULT_INTEREST_RATE;
     }
 
-    private double getInterestAcrued()
+    private Money getInterestAcrued()
     {
         return interestAccrued;
     }
 
     private boolean doesAccountRequireInterest(Account account)
     {
-        return account.getBalance() >= MIN_BALANCE_TO_COLLECT_INTEREST;
+        Money convertedMoney = MoneyConverter.getInstance().convertToCurrency(account.getBalance(), MIN_BALANCE_TO_COLLECT_INTEREST.getCurrencyType());
+        return account.getBalance().getAmount() >= MIN_BALANCE_TO_COLLECT_INTEREST.getAmount();
     }
 
     private double calculateInterest(double amount)
     {
         return (amount * DEFAULT_INTEREST_RATE);
     }
-
 }

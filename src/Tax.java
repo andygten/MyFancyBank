@@ -8,31 +8,41 @@ public class Tax {
 
     // Static Variables
     static private double DEFAULT_TAX_PERCENTAGE = (2/100);
+    static private CurrencyTypes DEFAULT_TAX_CUR = CurrencyTypes.Usd;
+    static private final double TAX_INIT = 0.00;
 
     // Members
-    private double totalTaxedAmount;
+    private Money totalTaxedAmount;
     private double taxedPercentage;
+    private CurrencyTypes currencyType;
 
 
     public Tax()
     {
-        totalTaxedAmount = 0.00;
+        totalTaxedAmount = new Money(TAX_INIT, DEFAULT_TAX_CUR);
         taxedPercentage = DEFAULT_TAX_PERCENTAGE;
     }
 
-    public Tax(double taxedPercentage)
+    public Tax(double taxedPercentage, CurrencyTypes currencyType)
     {
-        totalTaxedAmount = 0.00;
+        totalTaxedAmount = new Money(TAX_INIT, currencyType);
         this.taxedPercentage = taxedPercentage;
     }
 
-    private double getTaxedAmount()
+    private Money getTaxedAmount()
     {
         return totalTaxedAmount;
     }
 
-    private double applyTax(double amount)
+    public Money applyTax(Money money)
     {
-        return (amount * taxedPercentage);
+        // Convert to common currency and apply the tax
+        Money convertedMoney = MoneyConverter.getInstance().convertToCurrency(money, currencyType);
+        Money taxedAmount= new Money(convertedMoney.getAmount() * taxedPercentage, currencyType);
+        totalTaxedAmount.add(taxedAmount);
+
+        // Return the money with the applied tax, in the original currency
+        Money convertedMoneyWithTaxApplied = new Money(convertedMoney.getAmount() * (1 - taxedPercentage), currencyType);
+        return MoneyConverter.getInstance().convertToCurrency(convertedMoneyWithTaxApplied, money.getCurrencyType());
     }
 }

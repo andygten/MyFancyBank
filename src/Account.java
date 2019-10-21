@@ -1,5 +1,3 @@
-import javax.naming.Name;
-
 /**
  * @file Account.java
  * @brief Represents the Account of a Customer or Manager
@@ -10,54 +8,97 @@ import javax.naming.Name;
 public class Account {
 
     // Members
-    private int[] PIN;
-    private String AccountID;
+    private String password;
+    private String accountID;
     private Name name;
-    private double balance;
+    private Money balance;
     private Interest interest;
 
 
-    public Account(String AccountID, Name name, int[] PIN, double balance)
-    {
-        this.AccountID = AccountID;
+    public Account(String accountID, String password, Name name, String balance) {
+        this.accountID = accountID;
         this.name = name;
-        this.PIN = PIN;
-        this.balance = balance;
+        this.password = password;
+        this.balance = new Money(Double.parseDouble(balance), CurrencyTypes.Usd);
         interest = new Interest();
     }
 
     /**
      * @brief No Arg Constructor
      */
-    public Account()
-    {
-        this("EMPTY", null, new int[4], 0.00);
+    public Account() {
+        this("", "", new Name("", "", ""), "0.00");
     }
 
     /**
-     * @brief Add to Balance of account
+     * @brief 2 Arg Constructor for determining if Accounts exist in Record
+     */
+    public Account(String accountID, String password)
+    {
+        this(accountID, password, new Name("", "", ""), "0.00");
+    }
+
+    /**
      * @param amount: Amount to add
+     * @brief Add to Balance of account
      */
-    protected void addBalance(double amount)
-    {
-        balance += amount;
+    protected void addBalance(Money amount) {
+        balance.add(amount);
     }
 
     /**
-     * @brief Deduct Balance from account
      * @param amount: Amount to deduct
+     * @brief Deduct Balance from account
      */
-    protected void deductBalance(double amount)
-    {
-        balance -= amount;
+    protected void deductBalance(Money amount) {
+        balance.add(amount);
     }
 
     /**
-     * @brief Get Balance of Account
      * @return double balance
+     * @brief Get Balance of Account
      */
-    public double getBalance()
-    {
+    public Money getBalance() {
         return balance;
+    }
+
+    /**
+     * @return String
+     * @brief Get the ID of the Account
+     */
+    private String getAccountID() {
+        return accountID;
+    }
+
+    /**
+     * @return String : Password
+     * @brief Get the Password of an Account
+     */
+    private String getPassword() {
+        return password;
+    }
+
+    public CurrencyTypes getCurrencyPreference()
+    {
+        return balance.getCurrencyType();
+    }
+
+
+    /**
+     * @brief An Account will be determined as equal if there Account ID and Password Are the same
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Account account = (Account) obj;
+
+        return ((account.accountID.compareTo(accountID) == 0) &&
+                (account.password.compareTo(password) == 0));
     }
 }

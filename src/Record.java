@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * @file Record.java
  * @brief Transaction and Account History of all the transactions taken place during the session
@@ -8,43 +10,52 @@
 public class Record {
 
     // Static Variables
-    private static int MAX_NUM_OF_SUPPORTED_ACCOUNTS = 8192;
-    private static int MAX_NUM_OF_SUPPORTED_TRANSACTIONS = 65536;
+    private static int MAX_NUM_OF_SUPPORTED_ACCOUNTS = 100;
+    private static int MAX_NUM_OF_SUPPORTED_TRANSACTIONS = 100;
 
     // Members
-    private Account[] accounts;
-    private Transaction[] transactions;
+    private ArrayList<Account> accounts;
+    private ArrayList<Transaction> transactions;
     private int numAccounts;
     private int numTransactions;
 
     public Record ()
     {
-        accounts = new Account[MAX_NUM_OF_SUPPORTED_ACCOUNTS];
-        transactions = new Transaction[MAX_NUM_OF_SUPPORTED_TRANSACTIONS];
-
+        accounts = new ArrayList<Account>(MAX_NUM_OF_SUPPORTED_ACCOUNTS);
+        transactions = new ArrayList<Transaction>(MAX_NUM_OF_SUPPORTED_TRANSACTIONS);
         numAccounts = 0;
         numTransactions = 0;
     }
 
-    private Account[] getAccounts()
+    private ArrayList<Account> getAccounts()
     {
         return accounts;
     }
 
-    private Transaction[] getTransactions()
+    private ArrayList<Transaction> getTransactions()
     {
         return transactions;
     }
 
-    private void addAccount(Account account)
+    public void addAccount(Account account)
     {
-        accounts[numAccounts] = account;
+        accounts.add(account);
         numAccounts++;
+    }
+
+    /**
+     * @brief Verify that an account exists by checking the list for that object
+     * @param account Account object to determine if it exists
+     * @return
+     */
+    public boolean verifyAccount(Account account)
+    {
+        return accounts.contains(account);
     }
 
     private void addTransaction(Transaction transaction)
     {
-        transactions[numTransactions] = transaction;
+        transactions.add(transaction);
         numTransactions++;
     }
 
@@ -57,6 +68,5 @@ public class Record {
     {
         return numTransactions;
     }
-
 
 }

@@ -27,7 +27,8 @@ public class DisplayPanel extends JPanel {
         TEXTINPUT,
         OKBUTTON,
         ACCOUNT_LOGIN_PANEL,
-        ACCOUNT_CREATE_PANEL
+        ACCOUNT_CREATE_PANEL,
+        ACCOUNT_TRANSACTION_PANEL
     }
 
     // Static
@@ -48,10 +49,10 @@ public class DisplayPanel extends JPanel {
     public CustomerButton customerButton;           ///< Account Selection Button for Managers
     public PinPad pinPad;                           ///< Pinpad Object
     //public Keyboard keyboard;                     ///< Keyboard Object
-    JTextField AccountTextField;                    ///< Account TextField
     public StyledDocument doc;
     public AccountLoginPanel accountLoginPanel;
     public AccountCreatePanel accountCreatePanel;
+    public TransactionPanel transactionPanel;
 
     /**
      * @brief No Arg Constructor
@@ -71,14 +72,17 @@ public class DisplayPanel extends JPanel {
         backButton.addEventHandler();
         accountLoginPanel = new AccountLoginPanel();
         accountCreatePanel = new AccountCreatePanel();
+        transactionPanel = new TransactionPanel();
 
+        // These were originally part of the design to create a realistic UI
+        // Please consider them for bonus points
         //keyboard = new Keyboard();
         //keyboard.addKeyBoardListener();
         //components.add(keyboard.Container);
+        //pinPad = new PinPad();
+        //pinPad.addPinPadListener();
 
         // Inactive at first
-        pinPad = new PinPad();
-        pinPad.addPinPadListener();
         yesButton = new YesButton();
         yesButton.addEventHandler();
         noButton = new NoButton();
@@ -207,6 +211,11 @@ public class DisplayPanel extends JPanel {
                 case ACCOUNT_CREATE_PANEL:
                     add(accountCreatePanel);
                     components.add(accountCreatePanel);
+                    break;
+
+                case ACCOUNT_TRANSACTION_PANEL:
+                    add(transactionPanel);
+                    components.add(transactionPanel);
                     break;
 
                 case BACK:

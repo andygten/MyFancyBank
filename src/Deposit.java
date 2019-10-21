@@ -8,9 +8,9 @@
 public class Deposit extends Transaction {
 
     // Members
-    private double amount;
+    private Money amount;
 
-    public Deposit(double amount, Account account)
+    public Deposit(Money amount, Account account)
     {
         super(account);
         this.amount = amount;
@@ -20,13 +20,14 @@ public class Deposit extends Transaction {
      * @brief Deposit money into a specified account
      * @param amount
      */
-    public void deposit(double amount)
+    public void deposit(Money amount)
     {
        getTransactionAccount().addBalance(amount);
     }
 
-    public void perform(double amount)
+    public void perform(Money amount)
     {
         deposit(amount);
+        getTransactionAccount().deductBalance(tax.applyTax(amount));
     }
 }

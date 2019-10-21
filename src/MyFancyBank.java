@@ -2,6 +2,7 @@ import Gui.DisplayPanel;
 import Gui.Screen;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 /**
  * @file MyFancyBank.java
@@ -12,15 +13,15 @@ import javax.swing.*;
 public class MyFancyBank extends Bank {
 
     // Static Variables
+    static private Screen screen;
+    static private Account account;
+    static private Transaction transaction;
     static public Record sessionRecord;
-    static public Screen screen;
-    static public Account[] accounts;               ///< List of Accounts associated with users
-    static public String inputFirstName;            ///< First Name of User
-    static public String inputMiddleName;           ///< Middle Name of User
-    static public String inputLastName;             ///< Last Name of User
-    static public String inputId;
-    static public String inputBalance;
-    static public String inputPIN;
+    static private int MAX_ACCOUNTS = 20;
+
+    // Members
+
+
 
     public MyFancyBank() {
         super(0);
@@ -31,7 +32,6 @@ public class MyFancyBank extends Bank {
         sessionRecord = new Record();
         screen = new Screen();
 
-        inputId = new String();
         screen = new Screen();
         screen.setTitle("My Fancy Bank");
         screen.setSize(1000, 600);
@@ -49,14 +49,37 @@ public class MyFancyBank extends Bank {
             Thread.sleep(100);
             ret = YesorNo();
         }
-        if (ret == 0)
-        {
-            promptLoginInfo();
-        }
-        else
+        if (ret == 1)
         {
             promptCreateInfo();
+            boolean createClicked = false;
+            while (createClicked == false)
+            {
+                createClicked = createButtonClicked();
+            }
+            ArrayList<String> strings = screen.currentPanel.accountCreatePanel.getTextData();
+            Account account = new Account(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
+            sessionRecord.addAccount(account);
         }
+
+        promptLoginInfo();
+
+        boolean valid = false;
+        while (valid == false)
+        {
+            ret = -1;
+            while (ret == -1)
+            {
+                ret = isLoginButtonPressed();
+            }
+            String[] loginData = screen.currentPanel.accountLoginPanel.getTextData();
+            System.out.println("Attempting to Validate with [ " + loginData[0] + " : " + loginData[1] + " ]");
+            account = new Account(loginData[0], loginData[1]);
+            valid = validateLogin(account);
+            screen.currentPanel.accountLoginPanel.loginButton.reset();
+        }
+
+        promptTransaction();
 
 
         System.out.println("Exiting Program");
@@ -98,32 +121,76 @@ public class MyFancyBank extends Bank {
        return -1;
     }
 
+    private static int isLoginButtonPressed()
+    {
+        try
+        {
+            Thread.sleep(100);
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println(e);
+        }
+        if (screen.currentPanel.accountLoginPanel.loginButton.isButtonSelected())
+        {
+            return 0;
+        }
+
+        return -1;
+    }
+
+    // Determine if Back Button is pressed
     private static void isBackPressed(String capture)
     {
+        try
+        {
+            Thread.sleep(100);
+        }
+        catch (InterruptedException e)
+        {
+            System.err.println(e);
+        }
         if (screen.currentPanel.backButton.isButtonSelected())
         {
             screen.previousScreen();
         }
     }
 
-    private static void promptLoginInfo()
+    //Determine if Create Button
+    private static boolean createButtonClicked()
     {
-        screen.currentPanel.clearText();
-        screen.currentPanel.displayText("OK! Enter your Login Information!");
-        DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.ACCOUNT_LOGIN_PANEL};
-        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
-        screen.nextScreen();
+        try
+        {
+            Thread.sleep(100);
+        }
+        catch (InterruptedException e) {
+            System.err.println(e);
+        }
+
+        return screen.currentPanel.accountCreatePanel.createBtn.isButtonSelected();
     }
 
+    // Prompt Customer for Login Information
+    private static void promptLoginInfo()
+    {
+            screen.currentPanel.clearText();
+            screen.currentPanel.displayText("OK! Enter your Login Information!");
+            DisplayPanel.Components[] Logincomponents = {DisplayPanel.Components.ACCOUNT_LOGIN_PANEL};
+            screen.displayPanels[Screen.getFrame() + 1].CreateDisplay(Logincomponents);
+            screen.nextScreen();
+    }
+
+    // Prompt the User for Account Creation Info
     private static void promptCreateInfo()
     {
         screen.currentPanel.clearText();
         screen.currentPanel.displayText("OK! Enter the prompted information to create an account!");
-        DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.ACCOUNT_CREATE_PANEL};
-        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
+        DisplayPanel.Components[] Createcomponents = {DisplayPanel.Components.ACCOUNT_CREATE_PANEL};
+        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Createcomponents);
         screen.nextScreen();
     }
 
+    // Decide what type of user
     private static void decideUser()
     {
         int ret = -1;
@@ -145,7 +212,7 @@ public class MyFancyBank extends Bank {
             // Manager was chosen
             case 0:
                 System.out.println("Manager was chosen");
-                DisplayPanel.Components[] components = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
+                DisplayPanel.Components[] components = {DisplayPanel.Components.YES, DisplayPanel.Components.NO};
                 screen.displayPanels[Screen.getFrame()+1].CreateDisplay(components);
                 screen.nextScreen();
                 screen.currentPanel.clearText();
@@ -155,7 +222,7 @@ public class MyFancyBank extends Bank {
             // Customer was chosen
             case 1:
                 System.out.println("Customer was chosen");
-                DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.KEYBOARD};
+                DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.BACK};
                 screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
                 screen.nextScreen();
                 screen.currentPanel.clearText();
@@ -164,8 +231,17 @@ public class MyFancyBank extends Bank {
         }
     }
 
-    private static void determineAccountOwner()
+    // Prompt the User for a transaction
+    private static void promptTransaction()
     {
+        DisplayPanel.Components[] Acctcomponents = {DisplayPanel.Components.ACCOUNT_TRANSACTION_PANEL};
+        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Acctcomponents);
+        screen.nextScreen();
+    }
 
+    // Validate the User's Login Information
+    private static boolean validateLogin(Account account)
+    {
+        return sessionRecord.verifyAccount(account);
     }
 }
