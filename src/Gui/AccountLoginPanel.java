@@ -7,6 +7,7 @@ package Gui;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class AccountLoginPanel extends JPanel {
     private JLabel accountIdLbl;
@@ -14,6 +15,7 @@ public class AccountLoginPanel extends JPanel {
     private JTextField accountIdTf;
     private JTextField passwordTf;
     public LoginButton loginButton;
+    public BackButton backButton;
 
     private static final int GAP = 5;
     private static final int MAX_ACCOUNT_ID_CHARS = 20;
@@ -22,10 +24,7 @@ public class AccountLoginPanel extends JPanel {
     private static final int GRID_ROWS = 3;
 
     public AccountLoginPanel() {
-        this(new Dimension(1, 1), new Rectangle(0, 0));
-    }
 
-    public AccountLoginPanel(Dimension dim, Rectangle rect) {
         this.setLayout(new GridLayout(GRID_ROWS, GRID_COLS));
         this.setBorder(new EmptyBorder(GAP, GAP, GAP, GAP));
 
@@ -62,10 +61,13 @@ public class AccountLoginPanel extends JPanel {
         add(loginButton);
     }
 
-    public String[] getTextData() {
-        String[] strings = new String[GRID_ROWS];
-        strings[0] = accountIdTf.getText();
-        strings[1] = passwordTf.getText();
+    public ArrayList<String> getTextData() {
+        ArrayList<String> strings = new ArrayList<String>(GRID_ROWS);
+        strings.add(accountIdTf.getText());
+        strings.add(passwordTf.getText());
+
+        accountIdTf.setText("");
+        passwordTf.setText("");
 
         return strings;
     }

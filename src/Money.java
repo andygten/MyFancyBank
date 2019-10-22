@@ -5,7 +5,6 @@
 
 public class Money {
 
-
     private double amount;
     private CurrencyTypes currencyType;
 
@@ -34,7 +33,7 @@ public class Money {
     }
 
     public void multiply(Money otherMoney) {
-        Money convertedMOney = Teller.getInstance().convertToCurrency(otherMoney, currencyType);
-        amount *= convertedMOney.getAmount();
+        Money convertedMoney = Teller.getInstance().convertToCurrency(otherMoney, currencyType);
+        amount *= convertedMoney.getAmount();
     }
 }

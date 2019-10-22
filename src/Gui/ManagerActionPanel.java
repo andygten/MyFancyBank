@@ -10,7 +10,8 @@ public class ManagerActionPanel extends JPanel {
     private JLabel accountLookupLbl;
     private JLabel dailyReportLbl;
     private JTextField accountLookupTf;
-    private RequestButton requestButton;
+    public LookupButton lookupButton;
+    public RequestButton requestButton;
 
     private ArrayList<String> textData;
 
@@ -43,20 +44,33 @@ public class ManagerActionPanel extends JPanel {
 
         accountLookupTf = new JTextField(MAX_CHARS);
         cs.gridx = 1;
-        cs.gridy = 0;
+        cs.gridy = 1;
         cs.gridwidth = 1;
         add(accountLookupTf, cs);
 
+        lookupButton = new LookupButton();
+        lookupButton.addEventHandler();
+        cs.gridx = 0;
+        cs.gridy = 2;
+        cs.gridwidth = 2;
+        add(lookupButton);
+
         dailyReportLbl = new JLabel("Daily Report: ");
         cs.gridx = 0;
-        cs.gridy = 1;
+        cs.gridy = 3;
         cs.gridwidth = 1;
         add(dailyReportLbl, cs);
 
         requestButton = new RequestButton();
-        cs.gridx = 1;
-        cs.gridy = 1;
-        cs.gridwidth = 1;
+        requestButton.addEventHandler();
+        cs.gridx = 0;
+        cs.gridy = 4;
+        cs.gridwidth = 2;
         add(requestButton, cs);
+    }
+
+    public String getAccountRequestID()
+    {
+        return accountLookupTf.getText();
     }
 }

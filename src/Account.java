@@ -18,6 +18,7 @@ public abstract class Account {
     private Name name;
     private Money balance;
     private AccountType accountType;
+    private boolean isLoggedIn;
 
 
     public Account(String accountID, String password, Name name, String balance, AccountType accountType) {
@@ -26,6 +27,7 @@ public abstract class Account {
         this.password = password;
         this.balance = new Money(Double.parseDouble(balance), CurrencyTypes.Usd);
         this.accountType = accountType;
+        isLoggedIn = false;
     }
 
     /**
@@ -71,9 +73,38 @@ public abstract class Account {
      * @return String
      * @brief Get the ID of the Account
      */
-    private String getAccountID() {
+    public String getAccountID() {
         return accountID;
     }
+
+    /**
+     * @brief Setter: isLoggedIn
+     * @return True or false
+     */
+    public void setLoggedIn(boolean loggedIn)
+    {
+        isLoggedIn = loggedIn;
+    }
+
+    public AccountType getAccountType()
+    {
+        return  accountType;
+    }
+
+    /**
+     * @brief Getter: isLoggedIn
+     * return isLoggedIn
+     */
+    public boolean getLoggedIn()
+    {
+        return isLoggedIn;
+    }
+
+    public Name getName()
+    {
+        return name;
+    }
+
 
     /**
      * @return String : Password
@@ -103,6 +134,8 @@ public abstract class Account {
 
         Account account = (Account) obj;
 
+        System.out.println("Account ID: " + account.accountID);
+        System.out.println("Password: " + account.password);
         return ((account.accountID.compareTo(accountID) == 0) &&
                 (account.password.compareTo(password) == 0));
     }

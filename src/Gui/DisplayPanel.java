@@ -16,21 +16,6 @@ import java.util.ArrayList;
 
 public class DisplayPanel extends JPanel {
 
-    public enum Components {
-        YES,
-        NO,
-        MANAGER,
-        CUSTOMER,
-        PINPAD,
-        KEYBOARD,
-        BACK,
-        TEXTINPUT,
-        OKBUTTON,
-        ACCOUNT_LOGIN_PANEL,
-        ACCOUNT_CREATE_PANEL,
-        ACCOUNT_TRANSACTION_PANEL
-    }
-
     // Static
     static private int docLength = 0;
     static private int displayPanelXCoord = 200;
@@ -39,68 +24,15 @@ public class DisplayPanel extends JPanel {
     static private JLabel textLabel;                        ///< Main Text Display
     public static int numActiveButtons = 0;
     public static int MAX_NUM_BUTTONS = 48;
+    static private int COMPONENT_MAX = 10;
 
     // Members
-    public ArrayList<JComponent> components;
-    public BackButton backButton;
-    public YesButton yesButton;                     ///< Yes Button
-    public NoButton noButton;                       ///< No Button
-    public ManagerButton managerButton;             ///< Account Selection Button for Managers
-    public CustomerButton customerButton;           ///< Account Selection Button for Managers
-    public PinPad pinPad;                           ///< Pinpad Object
-    //public Keyboard keyboard;                     ///< Keyboard Object
-    public StyledDocument doc;
-    public AccountLoginPanel accountLoginPanel;
-    public AccountCreatePanel accountCreatePanel;
-    public TransactionPanel transactionPanel;
 
     /**
      * @brief No Arg Constructor
      */
     public DisplayPanel(Dimension dimension, Rectangle rectangle) {
 
-        components = new ArrayList<JComponent>(48);
-
-        // Input Buttons
-        managerButton = new ManagerButton();
-        managerButton.addEventHandler();
-        components.add(managerButton);
-        customerButton = new CustomerButton();
-        customerButton.addEventHandler();
-        components.add(customerButton);
-        backButton = new BackButton();
-        backButton.addEventHandler();
-        accountLoginPanel = new AccountLoginPanel();
-        accountCreatePanel = new AccountCreatePanel();
-        transactionPanel = new TransactionPanel();
-
-        // These were originally part of the design to create a realistic UI
-        // Please consider them for bonus points
-        //keyboard = new Keyboard();
-        //keyboard.addKeyBoardListener();
-        //components.add(keyboard.Container);
-        //pinPad = new PinPad();
-        //pinPad.addPinPadListener();
-
-        // Inactive at first
-        yesButton = new YesButton();
-        yesButton.addEventHandler();
-        noButton = new NoButton();
-        noButton.addEventHandler();
-
-        // Main Text
-        textPane = new JTextPane();
-        textPane.setSize(dimension);
-        textPane.setBounds(rectangle);
-        textPane.setLocation(displayPanelXCoord, displayPanelYCoord);
-        textPane.setEditable(false);
-        textPane.setBackground(this.getBackground());
-        doc = textPane.getStyledDocument();
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
-        textPane.setVisible(true);
-        add(textPane);
     }
 
     public DisplayPanel() {
@@ -113,18 +45,6 @@ public class DisplayPanel extends JPanel {
      */
     public void displayText(String input) {
 
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
-        try {
-            doc.insertString(0, input, null);
-        } catch (BadLocationException ble) {
-            System.err.println("Bad Location Exception");
-        }
-
-        docLength = doc.getLength();
-        //textPane.setText(input);
-        add(textPane);
     }
 
     /**
@@ -132,97 +52,13 @@ public class DisplayPanel extends JPanel {
      * @brief Append Text to the TextPane object
      */
     public void appendText(String input) {
-        System.out.println("input: " + input);
-       try
-       {
-            doc.insertString(doc.getLength(), input, null);
-       } catch(BadLocationException exc)
-       {
-            exc.printStackTrace();
-       }
-
-        //textPane.setText(input);
-        add(textPane);
-       revalidate();
-    }
-
-    public void displayPin(String[] PIN) {
-        SimpleAttributeSet center = new SimpleAttributeSet();
-        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        doc.setParagraphAttributes(0, doc.getLength(), center, false);
-        try {
-            doc.insertString(docLength, "*", null);
-        } catch (BadLocationException ble) {
-            System.err.println("Bad Location Exception");
-        }
-
-        docLength = doc.getLength();
-        add(textPane);
     }
 
     public void clearText()
     {
         textPane.setText(null);
 
-        add(textPane);
+        //add(textPane);
     }
 
-    public void CreateDisplay(Components[] comp)
-    {
-        for (Components Comp : comp)
-        {
-            switch (Comp)
-            {
-                case YES:
-                    add(yesButton);
-                    components.add(yesButton);
-                    break;
-
-                case NO:
-                    add(noButton);
-                    components.add(noButton);
-                    break;
-
-                case MANAGER:
-                    add(managerButton);
-                    components.add(managerButton);
-                    break;
-
-                case CUSTOMER:
-                    add(customerButton);
-                    components.add(customerButton);
-                    break;
-
-                case PINPAD:
-                    add(pinPad);
-                    components.add(pinPad);
-                    break;
-
-                case KEYBOARD:
-                    //add(keyboard.Container);
-                    //components.add(keyboard.Container);
-                    break;
-
-                case ACCOUNT_LOGIN_PANEL:
-                    add(accountLoginPanel);
-                    components.add(accountLoginPanel);
-                    break;
-
-                case ACCOUNT_CREATE_PANEL:
-                    add(accountCreatePanel);
-                    components.add(accountCreatePanel);
-                    break;
-
-                case ACCOUNT_TRANSACTION_PANEL:
-                    add(transactionPanel);
-                    components.add(transactionPanel);
-                    break;
-
-                case BACK:
-                    add(backButton);
-                    components.add(backButton);
-                    break;
-            }
-        }
-    }
 }

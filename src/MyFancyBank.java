@@ -1,4 +1,3 @@
-import Gui.DisplayPanel;
 import Gui.Screen;
 
 import javax.swing.*;
@@ -12,24 +11,14 @@ import java.util.ArrayList;
  */
 public class MyFancyBank extends Bank {
 
-    public enum BankState {
-
-        UserSelect,
-        ManagerAction,
-        RequestReport,
-        LoginCreate,
-        LoginState,
-        CreateState,
-        UserActionState,
-        ProgramExit,
-    }
-
     // Static Variables
     static private Screen screen;
     static private Account account;
-    static private Transaction transaction;
     static public Record sessionRecord;
     static private int MAX_ACCOUNTS = 20;
+    static private int WINDOW_WIDTH = 1000;
+    static private int WINDOW_HEIGHT = 600;
+    static private Account lookupAccount;
 
     // Members
 
@@ -44,60 +33,58 @@ public class MyFancyBank extends Bank {
         sessionRecord = new Record();
         screen = new Screen();
 
-        screen = new Screen();
         screen.setTitle("My Fancy Bank");
-        screen.setSize(1000, 600);
+        screen.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         screen.setLocationRelativeTo(null);
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screen.setVisible(true);
-        screen.currentPanel.displayText("Hello and Welcome to My Fancy Bank! Are you a Manager or a Customer?");
 
-        BankState state = BankState.UserSelect;
-        BankState currentState = BankState.UserActionState;
+        Screen.ScreenState state = Screen.ScreenState.UserSelect;
+        Screen.ScreenState currentState = Screen.ScreenState.UserActionState;
 
         int ret = -1;
         while (programExit == false) {
 
-
-
+            Thread.sleep(10);
+            if (currentState != state) {
+                screen.nextScreen(state);
+                if (state == Screen.ScreenState.UserActionState)
+                {
+                    screen.currentPanel.textPane.setText("User: " + sessionRecord.getActiveAccount().getAccountID());
+                }
+                currentState = state;
+            }
+            if (screen.currentPanel.backButton.isButtonSelected())
+            {
+                state = screen.previousScreen();
+            }
             switch (state) {
                 case UserSelect:
                     state = decideUser();
-                    currentState = state;
                     break;
 
                 case LoginCreate:
-                    state = YesOrNo();
-                    currentState = state;
+                    state = LoginCreateDecision();
                     break;
 
                 case CreateState:
-                    displayCreateInfo();
-                    while (state == currentState) {
-                        state = promptCreateInfo();
-                    }
-                    currentState = state;
+                    state = promptCreateInfo();
                     break;
 
                 case LoginState:
-                    displayLoginInfo();
-                    while (state == currentState) {
-                        state = promptLoginInfo();
-                    }
-                    currentState = state;
+                    state = promptLoginInfo();
                     break;
 
                 case ManagerAction:
-
+                    state = RequestAccountLookupInfo();
                     break;
 
                 case UserActionState:
-                    displayTransactionPanel();
-                    while (state == currentState)
-                    {
-                        state = promptTransaction();
-                    }
-                    currentState = state;
+                    state = promptTransactions();
+                    break;
+
+                case AccountInfoState:
+                    state = DisplayRequestedUserInfo();
                     break;
 
                 case RequestReport:
@@ -118,207 +105,162 @@ public class MyFancyBank extends Bank {
      * @brief Main execution is often prompted with questions for which we need to wait for an answer
      */
     private static int hasDecisionBeenMade() {
-        if (screen.currentPanel.managerButton.isButtonSelected() == true) {
-            // Return 0 for Manager Selection
+        if (screen.currentPanel.managerButton.isButtonSelected())
+        {
             return 0;
-        } else if (screen.currentPanel.customerButton.isButtonSelected() == true) {
-            // Return 1 for Customer Selection
+        }
+        else if (screen.currentPanel.customerButton.isButtonSelected())
+        {
             return 1;
         }
-
         return -1;
     }
 
     /**
-     * @brief Determine if Yes or No Button has been pressed
+     * @brief Determine if user wants to login or create an account
      */
-    private static BankState YesOrNo() {
-        int ret = -1;
+    private static Screen.ScreenState LoginCreateDecision() {
 
-        while (ret == -1) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                System.err.println(e);
-            }
-            if (screen.currentPanel.yesButton.isButtonSelected() == true) {
-                return BankState.LoginState;
-            } else if (screen.currentPanel.noButton.isButtonSelected() == true) {
-                return BankState.CreateState;
-            }
-            if (screen.currentPanel.backButton.isButtonSelected() == true)
-            {
-                System.out.println("Back Was Pressed");
-                return BankState.UserSelect;
-            }
-        }
-        return BankState.UserSelect;
-    }
-
-    private static int isLoginButtonPressed() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            System.err.println(e);
-        }
-        if (screen.currentPanel.accountLoginPanel.loginButton.isButtonSelected()) {
-            return 0;
-        }
-
-        return -1;
-    }
-
-    // Determine if Back Button is pressed
-    private static boolean isBackPressed() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            System.err.println(e);
-        }
-        if (screen.currentPanel.backButton.isButtonSelected())
+        if (screen.currentPanel.createButton.isButtonSelected())
         {
-            screen.currentPanel.backButton.reset();
-            return true;
+            return Screen.ScreenState.CreateState;
+        }
+        else if (screen.currentPanel.loginButton.isButtonSelected()) {
+            return Screen.ScreenState.LoginState;
         }
 
-        return false;
+        return Screen.ScreenState.LoginCreate;
+    }
+
+    private static boolean isLoginButtonPressed() {
+        return screen.currentPanel.accountLoginPanel.loginButton.isButtonSelected();
     }
 
     //Determine if Create Button
     private static boolean createButtonClicked() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            System.err.println(e);
-        }
-
         return screen.currentPanel.accountCreatePanel.createBtn.isButtonSelected();
     }
 
-    private static void displayLoginInfo()
-    {
-        screen.currentPanel.clearText();
-        screen.currentPanel.displayText("OK! Enter your Login Information!");
-        DisplayPanel.Components[] Logincomponents = {DisplayPanel.Components.ACCOUNT_LOGIN_PANEL};
-        screen.displayPanels[Screen.getFrame() + 1].CreateDisplay(Logincomponents);
-        screen.nextScreen();
-    }
-
     // Prompt Customer for Login Information
-    private static BankState promptLoginInfo() {
+    private static Screen.ScreenState promptLoginInfo() {
 
-        boolean valid = false;
-        int ret = -1;
-        while (valid == false) {
-            while (ret == -1) {
-                ret = isLoginButtonPressed();
+        if (isLoginButtonPressed())
+        {
+            ArrayList<String> loginData = screen.currentPanel.accountLoginPanel.getTextData();
+            account = new CheckingAccount(loginData.get(0), loginData.get(1));
+            if (validateLogin(account))
+            {
+                Account activeAccount = sessionRecord.getAccount(loginData.get(0));
+                sessionRecord.setActiveAccount(activeAccount);
+                return Screen.ScreenState.UserActionState;
             }
-            String[] loginData = screen.currentPanel.accountLoginPanel.getTextData();
-            System.out.println("Attempting to Validate with [ " + loginData[0] + " : " + loginData[1] + " ]");
-            account = new CheckingAccount(loginData[0], loginData[1]);
-            valid = validateLogin(account);
-            screen.currentPanel.accountLoginPanel.loginButton.reset();
+            else
+            {
+                screen.currentPanel.textPane.setText("Invalid Account, Please Try Again");
+            }
         }
 
-        return BankState.UserActionState;
-    }
-
-    private static void displayCreateInfo()
-    {
-        screen.currentPanel.clearText();
-        screen.currentPanel.displayText("OK! Enter the prompted information to create an account!");
-        DisplayPanel.Components[] Createcomponents = {DisplayPanel.Components.ACCOUNT_CREATE_PANEL};
-        screen.displayPanels[Screen.getFrame() + 1].CreateDisplay(Createcomponents);
-        screen.nextScreen();
+        return Screen.ScreenState.LoginState;
     }
 
     // Prompt the User for Account Creation Info
-    private static BankState promptCreateInfo() {
+    private static Screen.ScreenState promptCreateInfo() {
 
-        boolean createClicked = false;
-        while (createClicked == false) {
-            createClicked = createButtonClicked();
+        if (createButtonClicked()) {
+            ArrayList<String> strings = screen.currentPanel.accountCreatePanel.getTextData();
+            if (strings.get(6).compareTo("Savings") == 0) {
+                SavingsAccount account = new SavingsAccount(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
+                sessionRecord.addAccount(account);
+            } else {
+                CheckingAccount account = new CheckingAccount(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
+                sessionRecord.addAccount(account);
+            }
         }
-        ArrayList<String> strings = screen.currentPanel.accountCreatePanel.getTextData();
-        if (strings.get(6).compareTo("Savings") == 0) {
-            SavingsAccount account = new SavingsAccount(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
-            sessionRecord.addAccount(account);
-        } else {
-            CheckingAccount account = new CheckingAccount(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
-            sessionRecord.addAccount(account);
+        else {
+            return Screen.ScreenState.CreateState;
         }
 
-        return BankState.LoginState;
+        return Screen.ScreenState.LoginState;
     }
 
     // Decide what type of user
-    private static BankState decideUser()
+    private static Screen.ScreenState decideUser()
     {
-        int ret = -1;
-        while (ret == -1)
-        {
-            try
-            {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e)
-            {
-                System.err.println(e);
-            }
-            ret = hasDecisionBeenMade();
-        }
+
+        int ret = hasDecisionBeenMade();
 
         switch (ret)
         {
             // Manager was chosen
             case 0:
-                System.out.println("Manager was chosen");
-                DisplayPanel.Components[] components = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.BACK};
-                screen.displayPanels[Screen.getFrame()+1].CreateDisplay(components);
-                screen.nextScreen();
-                screen.currentPanel.clearText();
-                screen.currentPanel.displayText("Hello Manager! Do you already have an account?");
-                return BankState.ManagerAction;
+                return Screen.ScreenState.ManagerAction;
 
 
             // Customer was chosen
             case 1:
-                System.out.println("Customer was chosen");
-                DisplayPanel.Components[] Custcomponents = {DisplayPanel.Components.YES, DisplayPanel.Components.NO, DisplayPanel.Components.BACK};
-                screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Custcomponents);
-                screen.nextScreen();
-                screen.currentPanel.clearText();
-                screen.currentPanel.displayText("Hello Customer! Do you already have an account?");
-                return BankState.LoginCreate;
+                return Screen.ScreenState.LoginCreate;
         }
 
-        return BankState.UserSelect;
+        return Screen.ScreenState.UserSelect;
     }
 
-    private static void displayTransactionPanel()
+    // Get and Display User Data
+    private static Screen.ScreenState RequestAccountLookupInfo()
     {
-        DisplayPanel.Components[] Acctcomponents = {DisplayPanel.Components.ACCOUNT_TRANSACTION_PANEL};
-        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Acctcomponents);
-        screen.nextScreen();
+        if(screen.currentPanel.managerActionPanel.lookupButton.isButtonSelected()) {
+            lookupAccount = sessionRecord.getAccount(screen.currentPanel.managerActionPanel.getAccountRequestID());
+            if (lookupAccount == null)
+            {
+                return Screen.ScreenState.ManagerAction;
+            }
+            return Screen.ScreenState.AccountInfoState;
+        }
+        else if(screen.currentPanel.managerActionPanel.requestButton.isButtonSelected())
+        {
+
+        }
+
+        return Screen.ScreenState.ManagerAction;
     }
-    // Prompt the User for a transaction
-    private static BankState promptTransaction()
+
+    private static Screen.ScreenState DisplayRequestedUserInfo()
     {
-        return BankState.UserActionState;
+        Money balance = lookupAccount.getBalance();
+        Name name = lookupAccount.getName();
+        Account.AccountType accountType = lookupAccount.getAccountType();
+        screen.currentPanel.accountInfoPanel.setData(lookupAccount.getAccountID(), name.getFirstName(), name.getMiddleName(), name.getLastName(), balance.getAmount(), accountType.toString());
+
+        return Screen.ScreenState.AccountInfoState;
+    }
+
+    private static Screen.ScreenState promptTransactions()
+    {
+        Account activeAccount = sessionRecord.getActiveAccount();
+        if (screen.currentPanel.transactionPanel.depositRequest.isButtonSelected())
+        {
+            String amount = screen.currentPanel.transactionPanel.getDepositAmount();
+            Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
+            activeAccount.addBalance(money);
+        }
+        if (screen.currentPanel.transactionPanel.withdrawRequest.isButtonSelected())
+        {
+            String amount = screen.currentPanel.transactionPanel.getWithdrawAmount();
+            Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
+            activeAccount.deductBalance(money);
+        }
+        if (screen.currentPanel.transactionPanel.loanRequest.isButtonSelected())
+        {
+            String amount = screen.currentPanel.transactionPanel.getLoanAmount();
+            Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
+            activeAccount.addBalance(money);
+        }
+
+        return Screen.ScreenState.UserActionState;
     }
 
     // Validate the User's Login Information
     private static boolean validateLogin(Account account)
     {
         return sessionRecord.verifyAccount(account);
-    }
-
-    private static BankState promptManagerAction()
-    {
-        DisplayPanel.Components[] Acctcomponents = {DisplayPanel.Components.ACCOUNT_TRANSACTION_PANEL};
-        screen.displayPanels[Screen.getFrame()+1].CreateDisplay(Acctcomponents);
-        screen.nextScreen();
-
-        return BankState.UserActionState;
     }
 }

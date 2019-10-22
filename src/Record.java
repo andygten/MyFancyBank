@@ -14,6 +14,7 @@ public class Record {
     private static int MAX_NUM_OF_SUPPORTED_TRANSACTIONS = 100;
 
     // Members
+    private Account activeAccount;
     private ArrayList<Account> accounts;
     private ArrayList<Transaction> transactions;
     private int numAccounts;
@@ -41,6 +42,28 @@ public class Record {
     {
         accounts.add(account);
         numAccounts++;
+    }
+
+    public void setActiveAccount(Account account)
+    {
+        activeAccount = account;
+    }
+
+    public Account getActiveAccount()
+    {
+        return activeAccount;
+    }
+
+    public Account getAccount(String accountID)
+    {
+        for (Account account : accounts)
+        {
+            if(account.getAccountID().compareTo(accountID) == 0)
+            {
+                return account;
+            }
+        }
+        return null;
     }
 
     /**

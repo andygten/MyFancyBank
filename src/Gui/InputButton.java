@@ -24,7 +24,12 @@ public abstract class InputButton extends JButton {
 
     public boolean isButtonSelected()
     {
-        return selected;
+        if (selected == true)
+        {
+            reset();
+            return true;
+        }
+        return false;
     }
 
     public void reset()

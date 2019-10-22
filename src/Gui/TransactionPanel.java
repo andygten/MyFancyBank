@@ -11,9 +11,9 @@ public class TransactionPanel extends JPanel {
     private JTextField withdrawTf;
     private JTextField depositTf;
     private JTextField loanTf;
-    private RequestButton withdrawRequest;
-    private RequestButton depositRequest;
-    private RequestButton loanRequest;
+    public RequestButton withdrawRequest;
+    public RequestButton depositRequest;
+    public RequestButton loanRequest;
 
     private static final int GAP = 5;
     private static final int MAX_ACCOUNT_ID_CHARS = 20;
@@ -89,5 +89,20 @@ public class TransactionPanel extends JPanel {
         cs.gridwidth = 1;
         loanRequest.addEventHandler();
         add(loanRequest);
+    }
+
+    public String getWithdrawAmount()
+    {
+        return withdrawTf.getText();
+    }
+
+    public String getDepositAmount()
+    {
+        return depositTf.getText();
+    }
+
+    public String getLoanAmount()
+    {
+        return loanTf.getText();
     }
 }

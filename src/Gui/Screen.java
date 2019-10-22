@@ -1,109 +1,90 @@
 /**
  * @file MainPanel.java
- * @brief GUI Interface Main Panel that holds all other panels
+ * @brief GUI Interface Main Panel that holds all other panels and keeps track of their display order
  * @author Andrew Gieraltowski
  * @date 10/13/19
  */
 package Gui;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class Screen extends JFrame {
 
+    public enum ScreenState {
+        UserSelect(0),
+        ManagerAction(1),
+        RequestReport(2),
+        LoginCreate(3),
+        LoginState(4),
+        CreateState(5),
+        UserActionState(6),
+        AccountInfoState(7),
+        ProgramExit(8);
+
+        private int value;
+
+        private ScreenState(int value)
+        {
+            this.value = value;
+        }
+    }
+
     // Static Variables
-    private static int MAX_FRAME_NUM = 128;
-    private static int STARTING_FRAME_NUM = 0;
-    private static boolean firstButtonSetDisplayed = true;
-    private static int frameTracker = 0;                    ///< Keeps Track of the Execution Frame to Allow BackTracking
+    static private final int MAX_STATES = 9;
 
     // Members
-    //public  DisplayPanel[] displayPanels;                    ///< Collection of displays to filter through
-    public DisplayPanel[] displayPanels;
-    public DisplayPanel currentPanel;                      ///< Current Display
+    public ArrayList<InputPanel> inputPanels;
+    public InputPanel currentPanel;                      ///< Current Display
+    public Stack<ScreenState> screenStates;
 
     /**
      * @brief No Arg Constructor
      */
     public Screen()
     {
-        displayPanels = new DisplayPanel[MAX_FRAME_NUM];
-        for (int iii = 0; iii < MAX_FRAME_NUM; iii++)
-        {
-            displayPanels[iii] = new DisplayPanel();
-        }
-        currentPanel = displayPanels[0];
+        inputPanels = new ArrayList<InputPanel>(MAX_STATES);
+        screenStates = new Stack<ScreenState>();
+        inputPanels.add(new UserSelectPanel());
+        inputPanels.add(new ManagerInputPanel());
+        inputPanels.add(new ManagerInputPanel());
+        inputPanels.add(new AccountDecisionPanel());
+        inputPanels.add(new AccountLoginInputPanel());
+        inputPanels.add(new AccountCreateInputPanel());
+        inputPanels.add(new TransactionInputPanel());
+        inputPanels.add(new AccountInfoInputPanel());
 
-        add(currentPanel, BorderLayout.CENTER);
-        add(currentPanel.customerButton, BorderLayout.EAST);
-        add(currentPanel.managerButton, BorderLayout.WEST);
-        add(currentPanel.backButton, BorderLayout.SOUTH);
-        //add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
+        currentPanel = inputPanels.get(0);
+
+
+
     }
 
-    public void nextScreen()
+    public void nextScreen(ScreenState screenState)
     {
-        for (JComponent component : currentPanel.components)
-        {
-            remove(component);
-        }
-        remove(currentPanel);
+        getContentPane().remove(currentPanel);
         revalidate();
-        frameTracker++;
-        currentPanel = displayPanels[frameTracker];
-        add(currentPanel, BorderLayout.CENTER);
-        for (JComponent component : currentPanel.components)
-        {
-            if (component.getClass() == CustomerButton.class)
-            {
-                add(currentPanel.customerButton, BorderLayout.EAST);
-            }
-            else if (component.getClass() == ManagerButton.class)
-            {
-                add(currentPanel.managerButton, BorderLayout.WEST);
-            }
-            else if (component.getClass() == YesButton.class)
-            {
-                add(currentPanel.yesButton, BorderLayout.EAST);
-            }
-            else if (component.getClass() == NoButton.class)
-            {
-                add(currentPanel.noButton, BorderLayout.WEST);
-            }
-            else if (component.getClass() == PinPad.class)
-            {
-                add(currentPanel.pinPad, BorderLayout.SOUTH);
-            }
-            else if (component.getClass() == Keyboard.class)
-            {
-                //add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
-            }
-            else if (component.getClass() == BackButton.class)
-            {
-                add(currentPanel.backButton, BorderLayout.SOUTH);
-            }
-            else
-            {
-                //add(currentPanel.keyboard.Container, BorderLayout.SOUTH);
-            }
-        }
+        currentPanel = inputPanels.get(screenState.value);
+        screenStates.push(screenState);
+        add(currentPanel);
+        invalidate();
         revalidate();
+        repaint();
     }
 
-    public void previousScreen()
+    public ScreenState previousScreen()
     {
-        if (frameTracker > 0)
-        {
-            frameTracker--;
-        }
-        currentPanel = displayPanels[frameTracker];
+        getContentPane().remove(currentPanel);
         revalidate();
-    }
-
-    public static int getFrame()
-    {
-        return frameTracker;
+        screenStates.pop();
+        ScreenState state = screenStates.peek();
+        currentPanel = inputPanels.get(state.value);
+        add(currentPanel);
+        invalidate();
+        revalidate();
+        repaint();
+        return state;
     }
 }

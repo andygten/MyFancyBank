@@ -21,7 +21,6 @@ public class AccountCreatePanel extends JPanel {
     private JTextField initialDepositTf;
     private JTextField accountTypeTf;
 
-    private ArrayList<String> textData;
 
     public CreateButton createBtn;
 
@@ -38,8 +37,6 @@ public class AccountCreatePanel extends JPanel {
     public AccountCreatePanel(Dimension dim, Rectangle rect) {
         this.setLayout(new GridLayout(GRID_ROWS,GRID_COLS));
         this.setBorder(new EmptyBorder(GAP, GAP, GAP, GAP));
-
-        textData = new ArrayList<String>(GRID_ROWS);
 
         GridBagConstraints cs = new GridBagConstraints();
 
@@ -136,6 +133,9 @@ public class AccountCreatePanel extends JPanel {
 
     public ArrayList<String> getTextData()
     {
+
+        ArrayList<String> textData = new ArrayList<String>(GRID_ROWS);
+
         if (accountIdTf.getText() != null) {
             textData.add(accountIdTf.getText());
         }
@@ -191,6 +191,14 @@ public class AccountCreatePanel extends JPanel {
         {
             textData.add("");
         }
+
+        accountIdTf.setText("");
+        passwordTf.setText("");
+        firstNameTf.setText("");
+        middleNameTf.setText("");
+        lastNameTf.setText("");
+        initialDepositTf.setText("");
+        accountTypeTf.setText("");
 
         return textData;
     }
