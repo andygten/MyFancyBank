@@ -7,13 +7,9 @@
 
 public class Deposit extends Transaction {
 
-    // Members
-    private Money amount;
-
-    public Deposit(Money amount, Account account)
+    public Deposit(Account account)
     {
         super(account);
-        this.amount = amount;
     }
 
     /**

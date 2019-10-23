@@ -1,3 +1,6 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * @file Customer.java
  * @brief Object Representation of a Bank Customer
@@ -6,24 +9,52 @@
  */
 public class Customer extends Person {
 
+    // Static Variables
+    private static final int MAX_NUM_ACCOUNTS = 5;
+
     // Members
-    private Account account;        ///< Account Associated With Customer
+    private String customerID;
+    private ArrayList<Account> accounts;
+
 
     /**
      * @brief No Arg Constructor
      */
     public Customer()
     {
-        this(new CheckingAccount());
+        this("");
     }
 
     /**
      * @brief Single Arg Constructor
-     * @param account
+     * @param customerID
      */
-    public Customer(Account account)
+    public Customer(String customerID)
     {
-        this.account = account;
+        accounts = new ArrayList<Account>(MAX_NUM_ACCOUNTS);
+        this.customerID = customerID;
     }
 
+    /**
+     * @brief Add account to customer in record
+     */
+    public void addAccount(Account account)
+    {
+        accounts.add(account);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Customer customer = (Customer) obj;
+
+        return (customerID.compareTo(customer.customerID) == 0);
+    }
 }

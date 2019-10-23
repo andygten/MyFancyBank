@@ -18,11 +18,17 @@ public class SavingsAccount extends Account {
         interest = new Interest();
     }
 
+    public SavingsAccount(String accountID, String password)
+    {
+        super(accountID, password, AccountType.SAVINGS);
+    }
+
     /**
      * @brief No Arg Constructor
      */
-    public SavingsAccount()
-    {
+    public SavingsAccount() {
         this("", "", new Name("", "", ""), "0.00");
     }
+
+
 }

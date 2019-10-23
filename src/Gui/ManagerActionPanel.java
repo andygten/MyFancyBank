@@ -9,7 +9,9 @@ public class ManagerActionPanel extends JPanel {
 
     private JLabel accountLookupLbl;
     private JLabel dailyReportLbl;
+    private JLabel accountLookupTypeLbl;
     private JTextField accountLookupTf;
+    private JTextField accountLookupTypeTf;
     public LookupButton lookupButton;
     public RequestButton requestButton;
 
@@ -36,7 +38,7 @@ public class ManagerActionPanel extends JPanel {
 
         cs.fill = GridBagConstraints.HORIZONTAL;
 
-        accountLookupLbl = new JLabel("Account Lookup (ID/All): ");
+        accountLookupLbl = new JLabel("Account Lookup (ID): ");
         cs.gridx = 0;
         cs.gridy = 0;
         cs.gridwidth = 1;
@@ -44,9 +46,21 @@ public class ManagerActionPanel extends JPanel {
 
         accountLookupTf = new JTextField(MAX_CHARS);
         cs.gridx = 1;
-        cs.gridy = 1;
+        cs.gridy = 0;
         cs.gridwidth = 1;
         add(accountLookupTf, cs);
+
+        accountLookupTypeLbl = new JLabel("Account Lookup Type (Checking/Savings): ");
+        cs.gridx = 0;
+        cs.gridy = 1;
+        cs.gridwidth = 1;
+        add(accountLookupTypeLbl, cs);
+
+        accountLookupTypeTf = new JTextField(MAX_CHARS);
+        cs.gridx = 0;
+        cs.gridy = 1;
+        cs.gridwidth = 1;
+        add(accountLookupTypeTf, cs);
 
         lookupButton = new LookupButton();
         lookupButton.addEventHandler();
@@ -69,8 +83,11 @@ public class ManagerActionPanel extends JPanel {
         add(requestButton, cs);
     }
 
-    public String getAccountRequestID()
+    public ArrayList<String> getAccountRequestID()
     {
-        return accountLookupTf.getText();
+        ArrayList<String> strings = new ArrayList<String>(GRID_ROWS);
+        strings.add(accountLookupTf.getText());
+        strings.add(accountLookupTypeTf.getText());
+        return strings;
     }
 }

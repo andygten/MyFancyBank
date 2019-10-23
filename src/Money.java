@@ -18,9 +18,15 @@ public class Money {
         currencyType = curType;
     }
 
-    public double getAmount() { return amount; }
+    public double getAmount()
+    {
+        return amount;
+    }
 
-    public CurrencyTypes getCurrencyType() { return currencyType; }
+    public CurrencyTypes getCurrencyType()
+    {
+        return currencyType;
+    }
 
     public void add(Money otherMoney) {
         Money convertedMoney = Teller.getInstance().convertToCurrency(otherMoney, currencyType);

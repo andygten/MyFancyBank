@@ -8,12 +8,15 @@ public class TransactionPanel extends JPanel {
     private JLabel withdrawLbl;
     private JLabel depositLbl;
     private JLabel loanLbl;
+    private JLabel requestBalanceLbl;
     private JTextField withdrawTf;
     private JTextField depositTf;
     private JTextField loanTf;
+    private JTextField requestBalanceTf;
     public RequestButton withdrawRequest;
     public RequestButton depositRequest;
     public RequestButton loanRequest;
+    public RequestButton balanceRequest;
 
     private static final int GAP = 5;
     private static final int MAX_ACCOUNT_ID_CHARS = 20;
@@ -73,22 +76,43 @@ public class TransactionPanel extends JPanel {
 
         loanLbl = new JLabel("Loan: ");
         cs.gridx = 0;
-        cs.gridy = 1;
+        cs.gridy = 2;
         cs.gridwidth = 1;
         add(loanLbl, cs);
 
         loanTf = new JTextField(MAX_PASSWORD_CHARS);
         cs.gridx = 1;
-        cs.gridy = 1;
+        cs.gridy = 2;
         cs.gridwidth = 1;
         add(loanTf, cs);
 
         loanRequest = new RequestButton();
-        cs.gridx = 1;
-        cs.gridy = 3;
+        cs.gridx = 2;
+        cs.gridy = 2;
         cs.gridwidth = 1;
         loanRequest.addEventHandler();
         add(loanRequest);
+
+        requestBalanceLbl = new JLabel("Balance: ");
+        cs.gridx = 0;
+        cs.gridy = 3;
+        cs.gridwidth = 1;
+        add(requestBalanceLbl, cs);
+
+        requestBalanceTf = new JTextField(MAX_PASSWORD_CHARS);
+        requestBalanceTf.setEditable(false);
+        cs.gridx = 1;
+        cs.gridy = 3;
+        cs.gridwidth = 1;
+        add(requestBalanceTf, cs);
+
+        balanceRequest = new RequestButton();
+        cs.gridx = 2;
+        cs.gridy = 3;
+        cs.gridwidth = 1;
+        balanceRequest.addEventHandler();
+        add(balanceRequest);
+
     }
 
     public String getWithdrawAmount()
@@ -104,5 +128,10 @@ public class TransactionPanel extends JPanel {
     public String getLoanAmount()
     {
         return loanTf.getText();
+    }
+
+    public void setBalanceAmout(double amount)
+    {
+        requestBalanceTf.setText(Double.toString(amount));
     }
 }

@@ -13,6 +13,7 @@ public class AccountCreatePanel extends JPanel {
     private JLabel lastNameLbl;
     private JLabel initialDepositLbl;
     private JLabel accountTypeLbl;
+    private JLabel currencyTypeLbl;
     private JTextField accountIdTf;
     private JTextField passwordTf;
     private JTextField firstNameTf;
@@ -20,6 +21,7 @@ public class AccountCreatePanel extends JPanel {
     private JTextField lastNameTf;
     private JTextField initialDepositTf;
     private JTextField accountTypeTf;
+    private JTextField currencyTypeTf;
 
 
     public CreateButton createBtn;
@@ -27,7 +29,7 @@ public class AccountCreatePanel extends JPanel {
     private static final int GAP = 5;
     private static final int MAX_CHARS = 32;
     private static final int GRID_COLS = 3;
-    private static final int GRID_ROWS = 8;
+    private static final int GRID_ROWS = 9;
 
     public AccountCreatePanel()
     {
@@ -126,6 +128,18 @@ public class AccountCreatePanel extends JPanel {
         cs.gridwidth = 1;
         add(accountTypeTf, cs);
 
+        currencyTypeLbl = new JLabel("Currency Type(usd,euro,can): ");
+        cs.gridx = 0;
+        cs.gridy = 7;
+        cs.gridwidth = 1;
+        add(currencyTypeLbl, cs);
+
+        currencyTypeTf = new JTextField(MAX_CHARS);
+        cs.gridx = 1;
+        cs.gridy = 7;
+        cs.gridwidth = 1;
+        add(currencyTypeTf, cs);
+
         createBtn = new CreateButton();
         createBtn.addEventHandler();
         add(createBtn);
@@ -191,6 +205,14 @@ public class AccountCreatePanel extends JPanel {
         {
             textData.add("");
         }
+        if (currencyTypeTf != null)
+        {
+            textData.add(currencyTypeTf.getText());
+        }
+        else
+        {
+            textData.add("");
+        }
 
         accountIdTf.setText("");
         passwordTf.setText("");
@@ -199,6 +221,7 @@ public class AccountCreatePanel extends JPanel {
         lastNameTf.setText("");
         initialDepositTf.setText("");
         accountTypeTf.setText("");
+        currencyTypeTf.setText("");
 
         return textData;
     }

@@ -5,7 +5,10 @@
  * @date 10/17/19
  */
 
-public abstract class Account {
+public class Account {
+
+    // Static Variables
+    private static final double ACCOUNT_OPENING_BONUS = 50;
 
     enum AccountType {
         CHECKING,
@@ -18,6 +21,9 @@ public abstract class Account {
     private Name name;
     private Money balance;
     private AccountType accountType;
+    private Withdraw withdraw;
+    private Deposit deposit;
+    private Loan loan;
     private boolean isLoggedIn;
 
 
@@ -25,8 +31,17 @@ public abstract class Account {
         this.accountID = accountID;
         this.name = name;
         this.password = password;
-        this.balance = new Money(Double.parseDouble(balance), CurrencyTypes.Usd);
+        if (balance.compareTo("") != 0) {
+            this.balance = new Money(Double.parseDouble(balance), CurrencyTypes.Usd);
+        }
+        else
+        {
+            this.balance = new Money(ACCOUNT_OPENING_BONUS, CurrencyTypes.Usd);
+        }
         this.accountType = accountType;
+        loan = new Loan();
+        withdraw = new Withdraw(this);
+        deposit = new Deposit( this);
         isLoggedIn = false;
     }
 
@@ -34,15 +49,15 @@ public abstract class Account {
      * @brief No Arg Constructor
      */
     public Account() {
-        this("", "", new Name("", "", ""), "0.00", AccountType.CHECKING);
+        this("", "", new Name("", "", ""), "0.00", AccountType.SAVINGS);
     }
 
     /**
      * @brief 2 Arg Constructor for determining if Accounts exist in Record
      */
-    public Account(String accountID, String password)
+    public Account(String accountID, String password, AccountType accountType)
     {
-        this(accountID, password, new Name("", "", ""), "0.00", AccountType.CHECKING);
+        this(accountID, password, new Name("", "", ""), "0.00", accountType);
     }
 
     /**
@@ -54,11 +69,39 @@ public abstract class Account {
     }
 
     /**
+     * @param amount to Deposit
+     * @brief deposit money into the account
+     */
+    protected void deposit(Money amount)
+    {
+        deposit.perform(amount);
+    }
+
+    /**
+     * @param amount to withdraw
+     * @brief withdraw money from account
+     */
+    protected void withdraw(Money amount)
+    {
+        withdraw.perform(amount);
+    }
+
+    /**
      * @param amount: Amount to deduct
      * @brief Deduct Balance from account
      */
     protected void deductBalance(Money amount) {
-        balance.add(amount);
+        balance.subtract(amount);
+    }
+
+
+    /**
+     * @param amount: Amount to add to loan
+     * @brief add loan
+     */
+    protected void addLoan(Money amount)
+    {
+        loan.addToLoan(amount);
     }
 
     /**
@@ -114,6 +157,7 @@ public abstract class Account {
         return password;
     }
 
+
     public CurrencyTypes getCurrencyPreference()
     {
         return balance.getCurrencyType();
@@ -134,9 +178,8 @@ public abstract class Account {
 
         Account account = (Account) obj;
 
-        System.out.println("Account ID: " + account.accountID);
-        System.out.println("Password: " + account.password);
         return ((account.accountID.compareTo(accountID) == 0) &&
-                (account.password.compareTo(password) == 0));
+                (account.password.compareTo(password) == 0) &&
+                (account.accountType.toString().compareToIgnoreCase(accountType.toString()) == 0));
     }
 }

@@ -15,6 +15,7 @@ public class Record {
 
     // Members
     private Account activeAccount;
+    private ArrayList<Customer> customers;
     private ArrayList<Account> accounts;
     private ArrayList<Transaction> transactions;
     private int numAccounts;
@@ -54,11 +55,18 @@ public class Record {
         return activeAccount;
     }
 
-    public Account getAccount(String accountID)
+    public Account getAccount(String accountID, String accountType)
     {
+        String thisAccountType = accountType;
+        if (thisAccountType.compareToIgnoreCase("Savings") != 0) {
+            // Default to Checking
+            thisAccountType = "Checking";
+        }
+
         for (Account account : accounts)
         {
-            if(account.getAccountID().compareTo(accountID) == 0)
+            if((account.getAccountID().compareTo(accountID) == 0) &&
+               (account.getAccountType().toString().compareToIgnoreCase(thisAccountType)) == 0)
             {
                 return account;
             }

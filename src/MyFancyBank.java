@@ -15,12 +15,14 @@ public class MyFancyBank extends Bank {
     static private Screen screen;
     static private Account account;
     static public Record sessionRecord;
+    static private Account lookupAccount;
+    static private Manager bankManager;
     static private int MAX_ACCOUNTS = 20;
     static private int WINDOW_WIDTH = 1000;
     static private int WINDOW_HEIGHT = 600;
-    static private Account lookupAccount;
 
     // Members
+
 
 
     public MyFancyBank() {
@@ -147,10 +149,17 @@ public class MyFancyBank extends Bank {
         if (isLoginButtonPressed())
         {
             ArrayList<String> loginData = screen.currentPanel.accountLoginPanel.getTextData();
-            account = new CheckingAccount(loginData.get(0), loginData.get(1));
+            if (loginData.get(2).compareToIgnoreCase("Savings") == 0)
+            {
+                account = new SavingsAccount(loginData.get(0), loginData.get(1));
+            }
+            else
+            {
+                account = new CheckingAccount(loginData.get(0), loginData.get(1));
+            }
             if (validateLogin(account))
             {
-                Account activeAccount = sessionRecord.getAccount(loginData.get(0));
+                Account activeAccount = sessionRecord.getAccount(loginData.get(0), loginData.get(1));
                 sessionRecord.setActiveAccount(activeAccount);
                 return Screen.ScreenState.UserActionState;
             }
@@ -208,7 +217,8 @@ public class MyFancyBank extends Bank {
     private static Screen.ScreenState RequestAccountLookupInfo()
     {
         if(screen.currentPanel.managerActionPanel.lookupButton.isButtonSelected()) {
-            lookupAccount = sessionRecord.getAccount(screen.currentPanel.managerActionPanel.getAccountRequestID());
+            ArrayList<String> strings = screen.currentPanel.managerActionPanel.getAccountRequestID();
+            lookupAccount = sessionRecord.getAccount(strings.get(0), strings.get(1));
             if (lookupAccount == null)
             {
                 return Screen.ScreenState.ManagerAction;
@@ -240,19 +250,24 @@ public class MyFancyBank extends Bank {
         {
             String amount = screen.currentPanel.transactionPanel.getDepositAmount();
             Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
-            activeAccount.addBalance(money);
+            activeAccount.deposit(money);
         }
         if (screen.currentPanel.transactionPanel.withdrawRequest.isButtonSelected())
         {
             String amount = screen.currentPanel.transactionPanel.getWithdrawAmount();
             Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
-            activeAccount.deductBalance(money);
+            activeAccount.withdraw(money);
         }
         if (screen.currentPanel.transactionPanel.loanRequest.isButtonSelected())
         {
             String amount = screen.currentPanel.transactionPanel.getLoanAmount();
             Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
-            activeAccount.addBalance(money);
+            activeAccount.addLoan(money);
+            activeAccount.deposit(money);
+        }
+        if (screen.currentPanel.transactionPanel.balanceRequest.isButtonSelected())
+        {
+            screen.currentPanel.transactionPanel.setBalanceAmout(activeAccount.getBalance().getAmount());
         }
 
         return Screen.ScreenState.UserActionState;

@@ -12,16 +12,18 @@ import java.util.ArrayList;
 public class AccountLoginPanel extends JPanel {
     private JLabel accountIdLbl;
     private JLabel passwordLbl;
+    private JLabel accountTypeLbl;
     private JTextField accountIdTf;
     private JTextField passwordTf;
+    private JTextField accountTypeTf;
     public LoginButton loginButton;
-    public BackButton backButton;
 
     private static final int GAP = 5;
     private static final int MAX_ACCOUNT_ID_CHARS = 20;
     private static final int MAX_PASSWORD_CHARS = 32;
+    private static final int MAX_ACCOUNT_TYPE_CHARS = 20;
     private static final int GRID_COLS = 3;
-    private static final int GRID_ROWS = 3;
+    private static final int GRID_ROWS = 4;
 
     public AccountLoginPanel() {
 
@@ -56,6 +58,18 @@ public class AccountLoginPanel extends JPanel {
         cs.gridwidth = 1;
         add(passwordTf, cs);
 
+        accountTypeLbl = new JLabel("Account Type (Checking/Savings):");
+        cs.gridx = 0;
+        cs.gridy = 2;
+        cs.gridwidth = 1;
+        add(accountTypeLbl);
+
+        accountTypeTf = new JTextField(MAX_ACCOUNT_TYPE_CHARS);
+        cs.gridx = 1;
+        cs.gridy = 2;
+        cs.gridwidth = 1;
+        add(accountTypeTf);
+
         loginButton = new LoginButton();
         loginButton.addEventHandler();
         add(loginButton);
@@ -65,9 +79,11 @@ public class AccountLoginPanel extends JPanel {
         ArrayList<String> strings = new ArrayList<String>(GRID_ROWS);
         strings.add(accountIdTf.getText());
         strings.add(passwordTf.getText());
+        strings.add(accountTypeTf.getText());
 
         accountIdTf.setText("");
         passwordTf.setText("");
+        accountTypeTf.setText("");
 
         return strings;
     }

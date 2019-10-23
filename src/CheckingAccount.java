@@ -14,7 +14,7 @@ public class CheckingAccount extends Account {
 
     public CheckingAccount(String accountID, String password)
     {
-        super(accountID, password);
+        super(accountID, password, AccountType.CHECKING);
     }
 
     /**

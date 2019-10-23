@@ -7,26 +7,18 @@
 
 public class Withdraw extends Transaction {
 
-    // Static Variables
-    private static final double WITHDRAW_INIT = 0.00;
-
-    // Members
-    private Money amount;
-
     public Withdraw()
     {
-        this(new Money(WITHDRAW_INIT, new CheckingAccount().getCurrencyPreference()), new CheckingAccount());
+        this(new Account());
     }
 
     /**
      * @brief Constructor
-     * @param amount: Amount to prompt withdrawal with
      * @param account: Account to withdraw from
      */
-    public Withdraw(Money amount, Account account)
+    public Withdraw(Account account)
     {
         super(account);
-        this.amount = amount;
     }
 
     /**
@@ -39,7 +31,7 @@ public class Withdraw extends Transaction {
     }
 
     /**
-     * @brief Perfor the Withdraw Action
+     * @brief Perform the Withdraw Action
      * @param amount: Amount to withdraw
      */
     public void perform(Money amount)
