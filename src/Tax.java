@@ -7,7 +7,7 @@
 public class Tax {
 
     // Static Variables
-    static private double DEFAULT_TAX_PERCENTAGE = 5;
+    static public double DEFAULT_TAX_PERCENTAGE = 5;
     static private CurrencyTypes DEFAULT_TAX_CUR = CurrencyTypes.Usd;
     static private final double TAX_INIT = 0.00;
 

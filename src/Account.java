@@ -40,8 +40,8 @@ public class Account {
         }
         this.accountType = accountType;
         loan = new Loan();
-        withdraw = new Withdraw(this);
-        deposit = new Deposit( this);
+        //withdraw = new Withdraw(this);
+        //deposit = new Deposit( this);
         isLoggedIn = false;
     }
 
@@ -72,19 +72,6 @@ public class Account {
      * @param amount to Deposit
      * @brief deposit money into the account
      */
-    protected void deposit(Money amount)
-    {
-        deposit.perform(amount);
-    }
-
-    /**
-     * @param amount to withdraw
-     * @brief withdraw money from account
-     */
-    protected void withdraw(Money amount)
-    {
-        withdraw.perform(amount);
-    }
 
     /**
      * @param amount: Amount to deduct

@@ -7,9 +7,13 @@
 
 public class Deposit extends Transaction {
 
-    public Deposit(Account account)
+    // Members
+    private double amount;
+
+    public Deposit(Money money, Account account)
     {
         super(account);
+        this.amount = money.getAmount();
     }
 
     /**
@@ -21,9 +25,11 @@ public class Deposit extends Transaction {
        getTransactionAccount().addBalance(amount);
     }
 
-    public void perform(Money amount)
+    public void perform()
     {
-        deposit(amount);
-        getTransactionAccount().deductBalance(tax.applyTax(amount));
+        deposit(new Money(amount, getTransactionAccount().getCurrencyPreference()));
+
+        // Apply the respective tax
+        getTransactionAccount().deductBalance(tax.applyTax(new Money(amount, getTransactionAccount().getCurrencyPreference())));
     }
 }

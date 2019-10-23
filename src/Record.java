@@ -84,18 +84,18 @@ public class Record {
         return accounts.contains(account);
     }
 
-    private void addTransaction(Transaction transaction)
+    public void addTransaction(Transaction transaction)
     {
         transactions.add(transaction);
         numTransactions++;
     }
 
-    private int getNumAccounts()
+    public int getNumAccounts()
     {
         return numAccounts;
     }
 
-    private int getNumTransactions()
+    public int getNumTransactions()
     {
         return numTransactions;
     }

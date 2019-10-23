@@ -34,5 +34,5 @@ public abstract class Transaction {
         return account;
     }
 
-    abstract public void perform(Money amount);
+    abstract public void perform();
 }

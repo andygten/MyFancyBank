@@ -33,6 +33,7 @@ public class MyFancyBank extends Bank {
 
         boolean programExit = false;
         sessionRecord = new Record();
+        bankManager = new Manager();
         screen = new Screen();
 
         screen.setTitle("My Fancy Bank");
@@ -254,20 +255,25 @@ public class MyFancyBank extends Bank {
         {
             String amount = screen.currentPanel.transactionPanel.getDepositAmount();
             Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
-            activeAccount.deposit(money);
+            Deposit deposit = new Deposit(money, activeAccount);
+            deposit.perform();
+            sessionRecord.addTransaction(deposit);
+            bankManager.addAmountCollected(new Money(Tax.DEFAULT_TAX_PERCENTAGE, activeAccount.getCurrencyPreference()));
         }
         if (screen.currentPanel.transactionPanel.withdrawRequest.isButtonSelected())
         {
             String amount = screen.currentPanel.transactionPanel.getWithdrawAmount();
             Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
-            activeAccount.withdraw(money);
+            Withdraw withdraw = new Withdraw(money, activeAccount);
+            withdraw.perform();
+            sessionRecord.addTransaction(withdraw);
+            bankManager.addAmountCollected(new Money(Tax.DEFAULT_TAX_PERCENTAGE, activeAccount.getCurrencyPreference()));
         }
         if (screen.currentPanel.transactionPanel.loanRequest.isButtonSelected())
         {
             String amount = screen.currentPanel.transactionPanel.getLoanAmount();
             Money money = new Money(Double.valueOf(amount), activeAccount.getCurrencyPreference());
             activeAccount.addLoan(money);
-            activeAccount.deposit(money);
         }
         if (screen.currentPanel.transactionPanel.balanceRequest.isButtonSelected())
         {
