@@ -229,6 +229,10 @@ public class MyFancyBank extends Bank {
         {
 
         }
+        else if(screen.currentPanel.managerActionPanel.earnedAmountButton.isButtonSelected())
+        {
+            screen.currentPanel.managerActionPanel.setEarnedAmount(bankManager.getAmountCollected().toString());
+        }
 
         return Screen.ScreenState.ManagerAction;
     }

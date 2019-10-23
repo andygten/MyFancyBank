@@ -42,4 +42,10 @@ public class Money {
         Money convertedMoney = Teller.getInstance().convertToCurrency(otherMoney, currencyType);
         amount *= convertedMoney.getAmount();
     }
+
+    @Override
+    public String toString()
+    {
+        return Double.toString(amount);
+    }
 }

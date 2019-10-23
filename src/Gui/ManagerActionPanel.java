@@ -10,10 +10,13 @@ public class ManagerActionPanel extends JPanel {
     private JLabel accountLookupLbl;
     private JLabel dailyReportLbl;
     private JLabel accountLookupTypeLbl;
+    private JLabel earnedAmountLbl;
     private JTextField accountLookupTf;
     private JTextField accountLookupTypeTf;
+    private JTextField earnedAmountTf;
     public LookupButton lookupButton;
     public RequestButton requestButton;
+    public RequestButton earnedAmountButton;
 
     private ArrayList<String> textData;
 
@@ -57,7 +60,7 @@ public class ManagerActionPanel extends JPanel {
         add(accountLookupTypeLbl, cs);
 
         accountLookupTypeTf = new JTextField(MAX_CHARS);
-        cs.gridx = 0;
+        cs.gridx = 1;
         cs.gridy = 1;
         cs.gridwidth = 1;
         add(accountLookupTypeTf, cs);
@@ -66,21 +69,40 @@ public class ManagerActionPanel extends JPanel {
         lookupButton.addEventHandler();
         cs.gridx = 0;
         cs.gridy = 2;
-        cs.gridwidth = 2;
+        cs.gridwidth = 1;
         add(lookupButton);
 
         dailyReportLbl = new JLabel("Daily Report: ");
         cs.gridx = 0;
-        cs.gridy = 3;
+        cs.gridy = 4;
         cs.gridwidth = 1;
         add(dailyReportLbl, cs);
 
         requestButton = new RequestButton();
         requestButton.addEventHandler();
         cs.gridx = 0;
-        cs.gridy = 4;
+        cs.gridy = 5;
         cs.gridwidth = 2;
         add(requestButton, cs);
+
+        earnedAmountLbl = new JLabel("Manager Earned: ");
+        cs.gridx = 0;
+        cs.gridy = 6;
+        cs.gridwidth = 1;
+        add(earnedAmountLbl, cs);
+
+        earnedAmountTf = new JTextField();
+        cs.gridx = 1;
+        cs.gridy = 6;
+        cs.gridwidth = 1;
+        add(earnedAmountTf);
+
+        earnedAmountButton = new RequestButton();
+        earnedAmountButton.addEventHandler();
+        cs.gridx = 2;
+        cs.gridy = 6;
+        cs.gridwidth = 1;
+        add(earnedAmountButton, cs);
     }
 
     public ArrayList<String> getAccountRequestID()
@@ -89,5 +111,10 @@ public class ManagerActionPanel extends JPanel {
         strings.add(accountLookupTf.getText());
         strings.add(accountLookupTypeTf.getText());
         return strings;
+    }
+
+    public void setEarnedAmount(String amount)
+    {
+        earnedAmountTf.setText(amount);
     }
 }
