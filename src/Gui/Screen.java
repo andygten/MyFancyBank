@@ -46,7 +46,7 @@ public class Screen extends JFrame {
     public Screen()
     {
         inputPanels = new ArrayList<InputPanel>(MAX_STATES);
-        screenStates = new Stack<ScreenState>();
+        screenStates = new Stack<>();
         inputPanels.add(new UserSelectPanel());
         inputPanels.add(new ManagerInputPanel());
         inputPanels.add(new ManagerInputPanel());
@@ -57,11 +57,11 @@ public class Screen extends JFrame {
         inputPanels.add(new AccountInfoInputPanel());
 
         currentPanel = inputPanels.get(0);
-
-
-
     }
 
+    /**
+     * @brief Move the state of the screen
+     */
     public void nextScreen(ScreenState screenState)
     {
         getContentPane().remove(currentPanel);
@@ -74,6 +74,10 @@ public class Screen extends JFrame {
         repaint();
     }
 
+    /**
+     * @brief traverse the screen stack and display
+     * @return
+     */
     public ScreenState previousScreen()
     {
         getContentPane().remove(currentPanel);

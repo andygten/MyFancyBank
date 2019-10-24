@@ -18,24 +18,14 @@ public class ManagerActionPanel extends JPanel {
     public RequestButton requestButton;
     public RequestButton earnedAmountButton;
 
-    private ArrayList<String> textData;
-
     private static final int GAP = 5;
     private static final int MAX_CHARS = 32;
-    private static final int GRID_COLS = 3;
+    private static final int GRID_COLS = 2;
     private static final int GRID_ROWS = 8;
 
     public ManagerActionPanel()
     {
-        this(new Dimension(GRID_COLS, GRID_ROWS), new Rectangle(0, 0));
-    }
-
-    public ManagerActionPanel(Dimension dim, Rectangle rect)
-    {
-        this.setLayout(new GridLayout(GRID_ROWS, GRID_COLS));
-        this.setBorder(new EmptyBorder(GAP, GAP, GAP, GAP));
-
-        textData = new ArrayList<String>(GRID_ROWS);
+        setLayout(new GridLayout(GRID_ROWS, GRID_COLS));
 
         GridBagConstraints cs = new GridBagConstraints();
 
@@ -69,19 +59,25 @@ public class ManagerActionPanel extends JPanel {
         lookupButton.addEventHandler();
         cs.gridx = 0;
         cs.gridy = 2;
+        cs.gridwidth = 2;
+        add(lookupButton, cs);
+
+        JLabel dummyLbl1 = new JLabel("");
+        cs.gridx = 1;
+        cs.gridy = 2;
         cs.gridwidth = 1;
-        add(lookupButton);
+        add(dummyLbl1, cs);
 
         dailyReportLbl = new JLabel("Daily Report: ");
         cs.gridx = 0;
-        cs.gridy = 4;
+        cs.gridy = 3;
         cs.gridwidth = 1;
         add(dailyReportLbl, cs);
 
         requestButton = new RequestButton();
         requestButton.addEventHandler();
         cs.gridx = 0;
-        cs.gridy = 5;
+        cs.gridy = 4;
         cs.gridwidth = 2;
         add(requestButton, cs);
 
@@ -95,7 +91,7 @@ public class ManagerActionPanel extends JPanel {
         cs.gridx = 1;
         cs.gridy = 6;
         cs.gridwidth = 1;
-        add(earnedAmountTf);
+        add(earnedAmountTf, cs);
 
         earnedAmountButton = new RequestButton();
         earnedAmountButton.addEventHandler();

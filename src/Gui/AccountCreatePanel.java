@@ -142,7 +142,7 @@ public class AccountCreatePanel extends JPanel {
 
         createBtn = new CreateButton();
         createBtn.addEventHandler();
-        add(createBtn);
+        add(createBtn, cs);
     }
 
     public ArrayList<String> getTextData()

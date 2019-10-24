@@ -15,16 +15,30 @@ public class Account {
         SAVINGS
     }
 
+    public enum AccountIDX {
+        ACCOUNTID(0),
+        PASSWORD(1),
+        FIRSTNAME(2),
+        MIDDLENAME(3),
+        LASTNAME(4),
+        ACCOUNT_TYPE(5),
+        BALANCE(6);
+
+        private int value;
+
+        private AccountIDX(int value)
+        {
+            this.value = value;
+        }
+    }
+
     // Members
     private String password;
     private String accountID;
     private Name name;
     private Money balance;
     private AccountType accountType;
-    private Withdraw withdraw;
-    private Deposit deposit;
     private Loan loan;
-    private boolean isLoggedIn;
 
 
     public Account(String accountID, String password, Name name, String balance, AccountType accountType) {
@@ -40,9 +54,6 @@ public class Account {
         }
         this.accountType = accountType;
         loan = new Loan();
-        //withdraw = new Withdraw(this);
-        //deposit = new Deposit( this);
-        isLoggedIn = false;
     }
 
     /**
@@ -107,34 +118,15 @@ public class Account {
         return accountID;
     }
 
-    /**
-     * @brief Setter: isLoggedIn
-     * @return True or false
-     */
-    public void setLoggedIn(boolean loggedIn)
-    {
-        isLoggedIn = loggedIn;
-    }
-
     public AccountType getAccountType()
     {
         return  accountType;
-    }
-
-    /**
-     * @brief Getter: isLoggedIn
-     * return isLoggedIn
-     */
-    public boolean getLoggedIn()
-    {
-        return isLoggedIn;
     }
 
     public Name getName()
     {
         return name;
     }
-
 
     /**
      * @return String : Password

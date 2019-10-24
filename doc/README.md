@@ -27,7 +27,7 @@
     and receive no money
     * Deposit Money
     * Request a Loan
-    * Each Transaction incurs a 5 credit fee
+    * Each Transaction incurs a 5 credit fee for checking accounts
 * Navigate to the managers panel
     * Enter an accounts ID and account type to display the contents
     

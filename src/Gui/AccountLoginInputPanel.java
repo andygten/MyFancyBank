@@ -8,5 +8,6 @@ public class AccountLoginInputPanel extends InputPanel {
     {
         add(accountLoginPanel);
         add(backButton, BorderLayout.SOUTH);
+        add(textPane, BorderLayout.NORTH);
     }
 }

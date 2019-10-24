@@ -12,6 +12,8 @@ public class Record {
     // Static Variables
     private static int MAX_NUM_OF_SUPPORTED_ACCOUNTS = 100;
     private static int MAX_NUM_OF_SUPPORTED_TRANSACTIONS = 100;
+    private static String CHECKING_ACCOUNT = "Checking";
+    private static String SAVINGS_ACCOUNT = "Savings";
 
     // Members
     private Account activeAccount;
@@ -58,9 +60,9 @@ public class Record {
     public Account getAccount(String accountID, String accountType)
     {
         String thisAccountType = accountType;
-        if (thisAccountType.compareToIgnoreCase("Savings") != 0) {
+        if (thisAccountType.compareToIgnoreCase(SAVINGS_ACCOUNT) != 0) {
             // Default to Checking
-            thisAccountType = "Checking";
+            thisAccountType = CHECKING_ACCOUNT;
         }
 
         for (Account account : accounts)

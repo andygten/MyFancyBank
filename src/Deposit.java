@@ -30,6 +30,8 @@ public class Deposit extends Transaction {
         deposit(new Money(amount, getTransactionAccount().getCurrencyPreference()));
 
         // Apply the respective tax
-        getTransactionAccount().deductBalance(tax.applyTax(new Money(amount, getTransactionAccount().getCurrencyPreference())));
+        if (getTransactionAccount().getAccountType() == Account.AccountType.CHECKING) {
+            getTransactionAccount().deductBalance(tax.applyTax(new Money(amount, getTransactionAccount().getCurrencyPreference())));
+        }
     }
 }

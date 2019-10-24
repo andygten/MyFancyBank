@@ -18,7 +18,6 @@ public class AccountLoginPanel extends JPanel {
     private JTextField accountTypeTf;
     public LoginButton loginButton;
 
-    private static final int GAP = 5;
     private static final int MAX_ACCOUNT_ID_CHARS = 20;
     private static final int MAX_PASSWORD_CHARS = 32;
     private static final int MAX_ACCOUNT_TYPE_CHARS = 20;
@@ -28,7 +27,6 @@ public class AccountLoginPanel extends JPanel {
     public AccountLoginPanel() {
 
         this.setLayout(new GridLayout(GRID_ROWS, GRID_COLS));
-        this.setBorder(new EmptyBorder(GAP, GAP, GAP, GAP));
 
         GridBagConstraints cs = new GridBagConstraints();
 

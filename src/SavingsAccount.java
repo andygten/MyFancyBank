@@ -21,6 +21,7 @@ public class SavingsAccount extends Account {
     public SavingsAccount(String accountID, String password)
     {
         super(accountID, password, AccountType.SAVINGS);
+        interest = new Interest();
     }
 
     /**

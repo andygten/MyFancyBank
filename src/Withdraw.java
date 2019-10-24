@@ -50,6 +50,8 @@ public class Withdraw extends Transaction {
         }
 
         // Apply the respective tax
-        getTransactionAccount().deductBalance(tax.applyTax(amount));
+        if (getTransactionAccount().getAccountType() == Account.AccountType.CHECKING) {
+            getTransactionAccount().deductBalance(tax.applyTax(amount));
+        }
     }
 }
