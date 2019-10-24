@@ -18,6 +18,7 @@ public class MyFancyBank extends Bank {
     static private int MAX_ACCOUNTS = 20;
     static private int WINDOW_WIDTH = 1000;
     static private int WINDOW_HEIGHT = 600;
+    static private int ACCOUNT_LOGIN_TYPE_IDX = 1;
     static private int ACCOUNT_ID_IDX = 0;
     static private int ACCOUNT_PSWD_IDX = 1;
     static private int ACCOUNT_TYPE_IDX = 2;
@@ -167,10 +168,14 @@ public class MyFancyBank extends Bank {
         if (createButtonClicked()) {
             ArrayList<String> strings = screen.currentPanel.accountCreatePanel.getTextData();
             if (strings.get(6).compareTo(SAVINGS_ACCOUNT) == 0) {
-                SavingsAccount account = new SavingsAccount(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
+                SavingsAccount account = new SavingsAccount(strings.get(Account.AccountIDX.ACCOUNTID.value), strings.get(Account.AccountIDX.FIRSTNAME.value),
+                                         new Name(strings.get(Account.AccountIDX.FIRSTNAME.value), strings.get(Account.AccountIDX.MIDDLENAME.value),
+                                                  strings.get(Account.AccountIDX.LASTNAME.value)), strings.get(Account.AccountIDX.BALANCE.value));
                 sessionRecord.addAccount(account);
             } else {
-                CheckingAccount account = new CheckingAccount(strings.get(0), strings.get(1), new Name(strings.get(2), strings.get(3), strings.get(4)), strings.get(5));
+                CheckingAccount account = new CheckingAccount(strings.get(Account.AccountIDX.ACCOUNTID.value), strings.get(Account.AccountIDX.FIRSTNAME.value),
+                        new Name(strings.get(Account.AccountIDX.FIRSTNAME.value), strings.get(Account.AccountIDX.MIDDLENAME.value),
+                                strings.get(Account.AccountIDX.LASTNAME.value)), strings.get(Account.AccountIDX.BALANCE.value));
                 sessionRecord.addAccount(account);
             }
         } else {
@@ -190,7 +195,6 @@ public class MyFancyBank extends Bank {
             case 0:
                 return Screen.ScreenState.ManagerAction;
 
-
             // Customer was chosen
             case 1:
                 return Screen.ScreenState.LoginCreate;
@@ -203,7 +207,7 @@ public class MyFancyBank extends Bank {
     private static Screen.ScreenState RequestAccountLookupInfo() {
         if (screen.currentPanel.managerActionPanel.lookupButton.isButtonSelected()) {
             ArrayList<String> strings = screen.currentPanel.managerActionPanel.getAccountRequestID();
-            lookupAccount = sessionRecord.getAccount(strings.get(0), strings.get(1));
+            lookupAccount = sessionRecord.getAccount(strings.get(ACCOUNT_ID_IDX), strings.get(ACCOUNT_LOGIN_TYPE_IDX));
             if (lookupAccount == null) {
                 return Screen.ScreenState.ManagerAction;
             }

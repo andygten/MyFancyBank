@@ -19,7 +19,6 @@ public class CreateButton extends InputButton {
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println( "Create button clicked" );
             selected = true;
         }
     }

@@ -24,7 +24,6 @@ public class RequestButton extends InputButton {
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println( "Request button clicked" );
             selected = true;
         }
     }

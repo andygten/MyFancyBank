@@ -24,7 +24,7 @@ public class Account {
         ACCOUNT_TYPE(5),
         BALANCE(6);
 
-        private int value;
+        public int value;
 
         private AccountIDX(int value)
         {

@@ -27,7 +27,6 @@ public class ManagerButton extends InputButton {
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println( "Manager button clicked" );
             selected = true;
         }
     }

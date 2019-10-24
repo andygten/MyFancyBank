@@ -20,7 +20,6 @@ public class BackButton extends InputButton {
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println( "Back button clicked" );
             selected = true;
         }
     }

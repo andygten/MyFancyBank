@@ -20,7 +20,6 @@ public class LookupButton extends InputButton {
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println( "Lookup button clicked" );
             selected = true;
         }
 

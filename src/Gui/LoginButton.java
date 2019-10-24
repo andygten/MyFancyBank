@@ -23,7 +23,6 @@ public class LoginButton extends InputButton {
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println( "Login button clicked" );
             selected = true;
         }
     }

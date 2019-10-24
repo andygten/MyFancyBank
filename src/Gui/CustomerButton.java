@@ -25,7 +25,6 @@ public class CustomerButton extends InputButton {
     {
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println( "Customer button clicked" );
             selected = true;
         }
     }
