@@ -11,7 +11,6 @@ public class Withdraw extends Transaction {
     private static final double WITHDRAW_INIT = 0.00;
 
     // Members
-    private Money amount;
 
     public Withdraw()
     {
@@ -25,8 +24,7 @@ public class Withdraw extends Transaction {
      */
     public Withdraw(Money amount, Account account)
     {
-        super(account);
-        this.amount = amount;
+        super(account, amount);
     }
 
     /**

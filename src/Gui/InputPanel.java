@@ -39,6 +39,7 @@ public abstract class InputPanel extends JPanel {
     public ManagerActionPanel managerActionPanel;
     public AccountInfoPanel accountInfoPanel;
     public JTextPane textPane;                      ///< Main Text Window
+    public TransactionListPanel transactionListPanel;
 
     /**
      * @brief No Arg Constructor
@@ -65,6 +66,7 @@ public abstract class InputPanel extends JPanel {
         managerActionPanel = new ManagerActionPanel();
         accountCreatePanel = new AccountCreatePanel();
         accountInfoPanel = new AccountInfoPanel();
+        transactionListPanel = new TransactionListPanel();
 
         // Layout
         setLayout(new BorderLayout());

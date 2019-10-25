@@ -21,8 +21,8 @@ public class Account {
         FIRSTNAME(2),
         MIDDLENAME(3),
         LASTNAME(4),
-        ACCOUNT_TYPE(5),
-        BALANCE(6);
+        BALANCE(5),
+        ACCOUNT_TYPE(6);
 
         public int value;
 
@@ -46,10 +46,17 @@ public class Account {
         this.name = name;
         this.password = password;
         if (balance.compareTo("") != 0) {
-            this.balance = new Money(Double.parseDouble(balance), CurrencyTypes.Usd);
+            try {
+                this.balance = new Money(Double.parseDouble(balance), CurrencyTypes.Usd);
+            }
+            catch (NumberFormatException e)
+            {
+                this.balance = new Money(ACCOUNT_OPENING_BONUS, CurrencyTypes.Usd);
+            }
         }
         else
         {
+            System.out.println("HEre");
             this.balance = new Money(ACCOUNT_OPENING_BONUS, CurrencyTypes.Usd);
         }
         this.accountType = accountType;

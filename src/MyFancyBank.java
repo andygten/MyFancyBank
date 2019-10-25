@@ -22,6 +22,10 @@ public class MyFancyBank extends Bank {
     static private int ACCOUNT_ID_IDX = 0;
     static private int ACCOUNT_PSWD_IDX = 1;
     static private int ACCOUNT_TYPE_IDX = 2;
+    static private int TRANSACTION_DISPLAY_SIZE = 3;
+    static private String WITHDRAW = "Withdraw";
+    static private String DEPOSIT = "Deposit";
+    static private String LOAN = "Loan";
     static private String SAVINGS_ACCOUNT = "Savings";
     static private String CHECKING_ACCOUNT = "Checking";
 
@@ -90,12 +94,10 @@ public class MyFancyBank extends Bank {
                     break;
 
                 case RequestReport:
-
+                    state = displayTransactions();
                     break;
 
-
                 case ProgramExit:
-
                     break;
             }
         }
@@ -167,15 +169,16 @@ public class MyFancyBank extends Bank {
 
         if (createButtonClicked()) {
             ArrayList<String> strings = screen.currentPanel.accountCreatePanel.getTextData();
-            if (strings.get(6).compareTo(SAVINGS_ACCOUNT) == 0) {
-                SavingsAccount account = new SavingsAccount(strings.get(Account.AccountIDX.ACCOUNTID.value), strings.get(Account.AccountIDX.FIRSTNAME.value),
+            if (strings.get(Account.AccountIDX.ACCOUNT_TYPE.value).compareTo(SAVINGS_ACCOUNT) == 0) {
+                SavingsAccount account = new SavingsAccount(strings.get(Account.AccountIDX.ACCOUNTID.value), strings.get(Account.AccountIDX.PASSWORD.value),
                                          new Name(strings.get(Account.AccountIDX.FIRSTNAME.value), strings.get(Account.AccountIDX.MIDDLENAME.value),
                                                   strings.get(Account.AccountIDX.LASTNAME.value)), strings.get(Account.AccountIDX.BALANCE.value));
                 sessionRecord.addAccount(account);
             } else {
-                CheckingAccount account = new CheckingAccount(strings.get(Account.AccountIDX.ACCOUNTID.value), strings.get(Account.AccountIDX.FIRSTNAME.value),
+                CheckingAccount account = new CheckingAccount(strings.get(Account.AccountIDX.ACCOUNTID.value), strings.get(Account.AccountIDX.PASSWORD.value),
                         new Name(strings.get(Account.AccountIDX.FIRSTNAME.value), strings.get(Account.AccountIDX.MIDDLENAME.value),
                                 strings.get(Account.AccountIDX.LASTNAME.value)), strings.get(Account.AccountIDX.BALANCE.value));
+                System.out.println("adding account");
                 sessionRecord.addAccount(account);
             }
         } else {
@@ -213,6 +216,7 @@ public class MyFancyBank extends Bank {
             }
             return Screen.ScreenState.AccountInfoState;
         } else if (screen.currentPanel.managerActionPanel.requestButton.isButtonSelected()) {
+            return Screen.ScreenState.RequestReport;
 
         } else if (screen.currentPanel.managerActionPanel.earnedAmountButton.isButtonSelected()) {
             screen.currentPanel.managerActionPanel.setEarnedAmount(bankManager.getAmountCollected().toString());
@@ -258,6 +262,32 @@ public class MyFancyBank extends Bank {
         }
 
         return Screen.ScreenState.UserActionState;
+    }
+
+    private static Screen.ScreenState displayTransactions()
+    {
+        int i = 0;
+        String[][] strings = new String[sessionRecord.getNumTransactions()][TRANSACTION_DISPLAY_SIZE];
+        for (Transaction transaction : sessionRecord.getTransactions())
+        {
+            int j = 0;
+            strings[i][j] = transaction.getTransactionAccount().getAccountID();
+            j++;
+            if (transaction.getClass() == Withdraw.class) {
+                strings[i][j] = WITHDRAW;
+            }
+            else if (transaction.getClass() == Deposit.class)
+            {
+                strings[i][j] = DEPOSIT;
+            }
+
+            j++;
+            strings[i][j] = transaction.getTransactionAmount();
+            i++;
+        }
+        screen.currentPanel.transactionListPanel.setTransactionsTable(strings);
+
+        return Screen.ScreenState.RequestReport;
     }
 
     // Validate the User's Login Information

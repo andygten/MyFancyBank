@@ -49,7 +49,7 @@ public class Screen extends JFrame {
         screenStates = new Stack<>();
         inputPanels.add(new UserSelectPanel());
         inputPanels.add(new ManagerInputPanel());
-        inputPanels.add(new ManagerInputPanel());
+        inputPanels.add(new TransactionListInputPanel());
         inputPanels.add(new AccountDecisionPanel());
         inputPanels.add(new AccountLoginInputPanel());
         inputPanels.add(new AccountCreateInputPanel());

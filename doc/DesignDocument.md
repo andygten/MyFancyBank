@@ -34,6 +34,10 @@ misinterpreted requirements.
 * Same goes for the buttons, I might have been able to abstract a few things into the InputButton
 class.
 
+* Because of the design split between directories of the GUI and the main logic of the program, I was
+not able to directly modify values in the main program from events in the GUI and therefore needed to 
+include some logic in the conjoined "Main" of the program where both designs combined.
+
 ## Class Breakdown
 ***
 ### Gui
@@ -91,6 +95,7 @@ class.
     * Manager
         * Representation of a manager, according to the requirements it is necessary to track
         how much money they made, so that is stored in this object and can be displayed
+        * Ideally, the managers earned amount would be tied to the transaction class
     
     * Customer
         * Customer Object with a list of accounts and associated customer ID for logging in

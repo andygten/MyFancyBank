@@ -31,12 +31,12 @@ public class Record {
         numTransactions = 0;
     }
 
-    private ArrayList<Account> getAccounts()
+    public ArrayList<Account> getAccounts()
     {
         return accounts;
     }
 
-    private ArrayList<Transaction> getTransactions()
+    public ArrayList<Transaction> getTransactions()
     {
         return transactions;
     }
@@ -91,6 +91,7 @@ public class Record {
         transactions.add(transaction);
         numTransactions++;
     }
+
 
     public int getNumAccounts()
     {

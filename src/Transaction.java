@@ -11,8 +11,10 @@ public abstract class Transaction {
     // Members
     private Account account;    ///< Account involved in the transaction
     protected Tax tax;
+    protected Money amount;
 
-    public Transaction(Account account) {
+    public Transaction(Account account, Money amount) {
+        this.amount = amount;
         this.account = account;
         this.tax = new Tax();
     }
@@ -22,7 +24,7 @@ public abstract class Transaction {
      */
     public Transaction()
     {
-        this(null);
+        this(new Account(), new Money());
     }
 
     /**
@@ -32,6 +34,14 @@ public abstract class Transaction {
     public Account getTransactionAccount()
     {
         return account;
+    }
+
+    /**
+     * @brief Getter: Amount in transaction
+     */
+    public String getTransactionAmount()
+    {
+        return amount.toString();
     }
 
     abstract public void perform();

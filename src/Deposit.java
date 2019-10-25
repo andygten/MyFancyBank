@@ -8,12 +8,9 @@
 public class Deposit extends Transaction {
 
     // Members
-    private double amount;
-
     public Deposit(Money money, Account account)
     {
-        super(account);
-        this.amount = money.getAmount();
+        super(account, money);
     }
 
     /**
@@ -27,11 +24,11 @@ public class Deposit extends Transaction {
 
     public void perform()
     {
-        deposit(new Money(amount, getTransactionAccount().getCurrencyPreference()));
+        deposit(new Money(amount.getAmount(), getTransactionAccount().getCurrencyPreference()));
 
         // Apply the respective tax
         if (getTransactionAccount().getAccountType() == Account.AccountType.CHECKING) {
-            getTransactionAccount().deductBalance(tax.applyTax(new Money(amount, getTransactionAccount().getCurrencyPreference())));
+            getTransactionAccount().deductBalance(tax.applyTax(new Money(amount.getAmount(), getTransactionAccount().getCurrencyPreference())));
         }
     }
 }
